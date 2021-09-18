@@ -1,0 +1,5 @@
+describe('Environment', function()
+  it('is alive', function()
+    assert.is_true(true)
+  end)
+end)

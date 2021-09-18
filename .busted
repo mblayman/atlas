@@ -1,0 +1,6 @@
+return {
+  _all = {
+    pattern = "_test",
+    ROOT = {'tests'},
+  }
+}
