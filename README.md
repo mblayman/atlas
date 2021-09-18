@@ -50,3 +50,7 @@ This order sounds appealing to me.
 1. Be guided by tests where possible.
 2. Be willing to do my own thing.
 3. Re-inventing the wheel may be fun... to a point.
+
+## Tools
+
+Busted for tests. `luarocks install busted`
