@@ -53,4 +53,5 @@ This order sounds appealing to me.
 
 ## Tools
 
-Busted for tests. `luarocks install busted`
+* Busted for tests. `luarocks install busted`
+* LuaCov for coverage. `luarocks install LuaCov`
