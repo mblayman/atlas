@@ -55,7 +55,4 @@ This order sounds appealing to me.
 
 * Busted for tests. `luarocks install busted`
 * LuaCov for coverage. `luarocks install LuaCov`
-
-## Future tools
-
-* LuaCheck might be a good one to get going.
+* LuaCheck for lint. `luarocks install LuaCheck`
