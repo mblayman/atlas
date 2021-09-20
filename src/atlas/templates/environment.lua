@@ -1,6 +1,6 @@
 local Environment = {}
 
-local function _init(cls)
+local function _init(_)
   local self = setmetatable({}, Environment)
   return self
 end

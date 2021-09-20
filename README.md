@@ -59,4 +59,3 @@ This order sounds appealing to me.
 ## Future tools
 
 * LuaCheck might be a good one to get going.
-* Set up GitHub Actions.

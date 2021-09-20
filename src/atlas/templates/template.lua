@@ -1,6 +1,6 @@
 local Template = {}
 
-local function _init(cls, source)
+local function _init(_, source)
   local self = setmetatable({}, Template)
   self.source = source
   return self
