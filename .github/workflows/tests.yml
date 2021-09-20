@@ -19,6 +19,7 @@ jobs:
       run: |
         luarocks install busted
         luarocks install luacheck
+        luarocks install LuaCov
 
     - name: lint
       run: |
@@ -26,4 +27,4 @@ jobs:
 
     - name: test
       run: |
-        busted
+        make coverage
