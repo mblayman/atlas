@@ -22,7 +22,7 @@ jobs:
 
     - name: lint
       run: |
-        luacheck
+        luacheck src tests
 
     - name: test
       run: |
