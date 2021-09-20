@@ -35,7 +35,7 @@ I plan to research existing projects,
 but I will attempt to write my own versions
 of things.
 I'm taking this inspiration from Richard Hipp,
-the author of SQLite
+the author of SQLite.
 
 There are a number of possible entry points.
 This order sounds appealing to me.
@@ -56,3 +56,8 @@ This order sounds appealing to me.
 * Busted for tests. `luarocks install busted`
 * LuaCov for coverage. `luarocks install LuaCov`
 * LuaCheck for lint. `luarocks install LuaCheck`
+
+## Future tools
+
+* `.rockspec` to make a proper Lua rock package?
+  This could help with dependency management.
