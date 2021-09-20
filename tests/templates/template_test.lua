@@ -24,7 +24,7 @@ describe('Template', function()
 
     local actual = template.render(context)
 
-    assert.are.equal(actual, 'hello')
+    assert.equal(actual, 'hello')
   end)
 
   it('renders variables', function()

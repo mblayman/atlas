@@ -48,3 +48,16 @@ using code generation techniques.
 After building up a function string,
 the parsing should call `load`
 to transform the string into a real executable function.
+
+### Development notes
+
+I think the default matching system will not offer enough features
+to parse a template adequately.
+
+Lua also doesn't have a regex system.
+I've found a couple of paths that I can consider:
+
+1. Use [Lrexlib](https://github.com/rrthomas/lrexlib) and build a lexer and parser.
+2. Use [LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/) and write a grammar.
+ * Read the [PEG Whitepaper](https://bford.info/pub/lang/peg.pdf)
+ * Read the [Packrat Parsing Whitepaper](https://bford.info/pub/lang/packrat-icfp02.pdf)
