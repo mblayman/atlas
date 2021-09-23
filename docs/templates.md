@@ -61,3 +61,10 @@ I've found a couple of paths that I can consider:
 2. Use [LPeg](http://www.inf.puc-rio.br/~roberto/lpeg/) and write a grammar.
  * Read the [PEG Whitepaper](https://bford.info/pub/lang/peg.pdf)
  * Read the [Packrat Parsing Whitepaper](https://bford.info/pub/lang/packrat-icfp02.pdf)
+ * https://stackoverflow.com/questions/56099771/how-to-write-a-simple-peg-grammar-for-a-liquid-like-templating-language
+
+Grammar notes:
+
+Comment     <- '{#' EndComment
+EndComment  <- '#}' / . EndComment
+EndOfString <- !.
