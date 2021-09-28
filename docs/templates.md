@@ -65,6 +65,21 @@ I've found a couple of paths that I can consider:
 
 Grammar notes:
 
+```
 Comment     <- '{#' EndComment
 EndComment  <- '#}' / . EndComment
 EndOfString <- !.
+```
+
+LPeg translation to PEG syntax (plus some general notes for better comprehension):
+
+* pattern1 * pattern2 => pattern1 AND pattern2
+* pattern1 + pattern2 => pattern1 OR  pattern2 (pattern1 / pattern2 in PEG paper)
+* lpeg.R("09")^0      => `\d*` in regex
+* lpeg.R("09")^1      => `\d+` in regex
+
+Strategy:
+
+1. Parse the source string into a syntax tree using a PEG grammar.
+2. Pass the syntax tree through a code builder (maybe with the visitor pattern)
+   to create the renderer function.
