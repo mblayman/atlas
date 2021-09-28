@@ -20,6 +20,7 @@ end
 -- Parse the source template to produce a renderer function.
 function Template.parse(self)
   -- TODO: pass off the source to a parser
+  -- TODO: build a renderer from the AST produced by the parser
   self._renderer = true
 end
 
