@@ -6,8 +6,8 @@ describe('Template', function()
     local template = Template('hello')
 
     assert.equal(getmetatable(template), Template)
-    assert.equal(template._source, 'hello')
-    assert.equal(template._renderer, nil)
+    assert.equal('hello', template._source)
+    assert.equal(nil, template._renderer)
   end)
 
   it('parses a renderer', function()
@@ -24,7 +24,7 @@ describe('Template', function()
 
     local actual = template.render(context)
 
-    assert.equal(actual, 'hello')
+    assert.equal('hello', actual)
   end)
 
   it('renders variables', function()

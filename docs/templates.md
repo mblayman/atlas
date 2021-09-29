@@ -62,14 +62,8 @@ I've found a couple of paths that I can consider:
  * Read the [PEG Whitepaper](https://bford.info/pub/lang/peg.pdf)
  * Read the [Packrat Parsing Whitepaper](https://bford.info/pub/lang/packrat-icfp02.pdf)
  * https://stackoverflow.com/questions/56099771/how-to-write-a-simple-peg-grammar-for-a-liquid-like-templating-language
-
-Grammar notes:
-
-```
-Comment     <- '{#' EndComment
-EndComment  <- '#}' / . EndComment
-EndOfString <- !.
-```
+ * http://www.gammon.com.au/lpeg
+ * https://docs.python.org/3/library/ast.html
 
 LPeg translation to PEG syntax (plus some general notes for better comprehension):
 
@@ -77,6 +71,10 @@ LPeg translation to PEG syntax (plus some general notes for better comprehension
 * pattern1 + pattern2 => pattern1 OR  pattern2 (pattern1 / pattern2 in PEG paper)
 * lpeg.R("09")^0      => `\d*` in regex
 * lpeg.R("09")^1      => `\d+` in regex
+
+If a pattern matches a whole string, LPeg returns the index after the match.
+Translation: len(string) + 1 (remember Lua is 1 indexed!)
+E.g., matching "hello" completely would return 6 if there are no captures.
 
 Strategy:
 
