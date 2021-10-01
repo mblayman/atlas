@@ -20,6 +20,7 @@ jobs:
         luarocks install busted
         luarocks install luacheck
         luarocks install LuaCov
+        luarocks build
 
     - name: lint
       run: |
