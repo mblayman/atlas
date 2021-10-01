@@ -13,9 +13,13 @@ Atlas aims to have a template engine similar to Jinja.
 Features
 --------
 
+Jinja syntax: https://jinja.palletsprojects.com/en/3.0.x/templates/
+
+* {% ... %} for Statements
+* {{ ... }} for Expressions to print to the template output
+* {# ... #} for Comments not included in the template output
 * `if/endif`
 * `for/endfor`
-* Comments `{# Not in the output. #}`
 
 Extra Desired Features
 ----------------------
@@ -64,6 +68,8 @@ I've found a couple of paths that I can consider:
  * https://stackoverflow.com/questions/56099771/how-to-write-a-simple-peg-grammar-for-a-liquid-like-templating-language
  * http://www.gammon.com.au/lpeg
  * https://docs.python.org/3/library/ast.html
+ * https://leafo.net/guides/parsing-expression-grammars.html
+ * http://www.playwithlua.com/?p=68
 
 LPeg translation to PEG syntax (plus some general notes for better comprehension):
 

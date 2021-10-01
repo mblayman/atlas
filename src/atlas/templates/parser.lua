@@ -1,7 +1,7 @@
 local lpeg = require 'lpeg'
 
-local _, CaptureToTable, Pattern, Set, Variable =
-  lpeg.C, lpeg.Ct, lpeg.P, lpeg.S, lpeg.V
+local _, CaptureToTable, Pattern, Range, Set, Variable =
+  lpeg.C, lpeg.Ct, lpeg.P, lpeg.R, lpeg.S, lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -27,19 +27,35 @@ setmetatable(Parser, {__call = _init})
 
 -- Build a raw text node.
 local function make_text_node(pattern)
-  return pattern / function(text)
-    return {node_type = 'text', ['text'] = text}
+  return pattern / function(matched_text)
+    return {node_type = 'text', text = matched_text}
   end
 end
 
 -- Pattern building blocks
 
--- Any        <- .
+-- Any          <- .
 -- local Any = Pattern(1)
 
--- Whitespace <- [ \t\r\n]*
+-- Digit        <- [0-9]
+local Digit = Range('09')
+
+-- Letter       <- [A-Za-z]
+local Letter = Range('AZ', 'az')
+
+-- Whitespace   <- [ \t\r\n]*
 local Whitespace = Set(' \t\r\n') ^ 0
 
+-- NameStart    <- Letter / '_'
+local NameStart = Letter + '_'
+
+-- NameContinue <- NameStart / Digit
+local NameContinue = NameStart + Digit
+
+-- TODO: How to demark that the name is *not* reserved?
+-- TODO: restore variable Name
+-- Name         <- NameStart (NameContinue)* Whitepace
+local _ = NameStart * NameContinue^0 * Whitespace
 
 -- Variables for open references within the grammar
 local Template = Variable('Template')

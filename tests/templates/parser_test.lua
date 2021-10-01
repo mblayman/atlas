@@ -7,7 +7,7 @@ describe('Parser', function()
     assert.equal(Parser, getmetatable(parser))
   end)
 
-  it('parses to an AST', function()
+  it('parses raw text to an AST', function()
     local parser = Parser()
     local source = 'hello template'
 
