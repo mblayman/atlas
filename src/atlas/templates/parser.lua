@@ -1,7 +1,7 @@
 local lpeg = require 'lpeg'
 
-local _, CaptureToTable, Pattern, Range, Set, Variable =
-  lpeg.C, lpeg.Ct, lpeg.P, lpeg.R, lpeg.S, lpeg.V
+local CaptureToTable, Pattern, Range, Set, Variable =
+  lpeg.Ct, lpeg.P, lpeg.R, lpeg.S, lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -26,16 +26,19 @@ setmetatable(Parser, {__call = _init})
 -- Node constructors
 
 -- Build a raw text node.
-local function make_text_node(pattern)
-  return pattern / function(matched_text)
-    return {node_type = 'text', text = matched_text}
-  end
+local function make_text_node(matched_text)
+  return {node_type = 'text', text = matched_text}
+end
+
+-- Build an expression node.
+local function make_expression_node(matched_expression)
+  return {node_type = 'expression', expression = matched_expression}
 end
 
 -- Pattern building blocks
 
 -- Any          <- .
--- local Any = Pattern(1)
+local Any = Pattern(1)
 
 -- Digit        <- [0-9]
 local Digit = Range('09')
@@ -59,11 +62,25 @@ local _ = NameStart * NameContinue^0 * Whitespace
 
 -- Variables for open references within the grammar
 local Template = Variable('Template')
+local TemplateExpression = Variable('TemplateExpression')
+local Expression = Variable('Expression')
+local RawText = Variable('RawText')
 
-local grammar = Pattern({
+local grammar = CaptureToTable(Pattern({
   Template,
-  Template = CaptureToTable(make_text_node(Whitespace)),
-})
+
+  -- Template              <- (TemplateExpression / RawText)*
+  Template = (TemplateExpression + RawText)^0,
+
+  -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
+  TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
+
+  -- Expression            <- !'}}' .*
+  Expression = (Any - Pattern('}}'))^1 / make_expression_node * Whitespace,
+
+  -- RawText               <- !'{{' .*
+  RawText = (Any - Pattern('{{'))^1 / make_text_node,
+}))
 
 -- Parse the source template into an AST.
 function Parser.parse(_, source)

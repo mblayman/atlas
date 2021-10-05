@@ -77,6 +77,7 @@ LPeg translation to PEG syntax (plus some general notes for better comprehension
 * pattern1 + pattern2 => pattern1 OR  pattern2 (pattern1 / pattern2 in PEG paper)
 * lpeg.R("09")^0      => `\d*` in regex
 * lpeg.R("09")^1      => `\d+` in regex
+* pattern1 - pattern2 => !pattern2 pattern1
 
 If a pattern matches a whole string, LPeg returns the index after the match.
 Translation: len(string) + 1 (remember Lua is 1 indexed!)

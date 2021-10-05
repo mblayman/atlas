@@ -13,7 +13,21 @@ describe('Parser', function()
 
     local ast = parser:parse(source)
 
-    -- TODO: produce an AST node with the source
-    assert.same({{node_type = 'text', text = ''}}, ast)
+    assert.same({{node_type = 'text', text = 'hello template'}}, ast)
+  end)
+
+  it('parses an expression to an AST', function()
+    local parser = Parser()
+    local source = 'before {{ variable }} after'
+    -- local source = '{{ variable }} after'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'text', text = 'before '},
+      {node_type = 'expression', expression = 'variable '},
+      {node_type = 'text', text = ' after'},
+    }
+    assert.same(expected, ast)
   end)
 end)
