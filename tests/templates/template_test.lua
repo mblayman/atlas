@@ -3,15 +3,17 @@ local Template = require 'atlas.templates.template'
 describe('Template', function()
 
   it('constructs an instance', function()
-    local template = Template('hello')
+    local context = {}
+    local template = Template('hello', context)
 
     assert.equal(getmetatable(template), Template)
     assert.equal('hello', template._source)
+    assert.equal(context, template._context)
     assert.equal(nil, template._renderer)
   end)
 
   it('parses a renderer', function()
-    local template = Template('hello')
+    local template = Template('hello', {})
 
     template:parse()
 
@@ -19,15 +21,15 @@ describe('Template', function()
   end)
 
   it('renders a raw string', function()
-    local template = Template('hello')
+    local template = Template('hello', {}):parse()
     local context = {}
 
-    local actual = template.render(context)
+    local actual = template:render(context)
 
     assert.equal('hello', actual)
   end)
 
-  it('renders variables', function()
+  it('renders expressions', function()
     -- TODO
   end)
 
