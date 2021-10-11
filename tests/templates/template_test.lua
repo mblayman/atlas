@@ -29,6 +29,17 @@ describe('Template', function()
     assert.equal('hello', actual)
   end)
 
+  it('renders a raw multi-line string #fit', function()
+    local template = Template([[
+hello
+  world]], {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('hello\n  world', actual)
+  end)
+
   it('renders expressions', function()
     -- TODO
   end)
