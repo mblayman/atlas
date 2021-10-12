@@ -21,11 +21,11 @@ setmetatable(Parser, {__call = _init})
 
 -- Node types:
 -- root - a list table
--- text - raw text in the template
+-- text - literal text in the template
 
 -- Node constructors
 
--- Build a raw text node.
+-- Build a literal text node.
 local function make_text_node(matched_text)
   return {node_type = 'text', text = matched_text}
 end
@@ -64,13 +64,13 @@ local _ = NameStart * NameContinue^0 * Whitespace
 local Template = Variable('Template')
 local TemplateExpression = Variable('TemplateExpression')
 local Expression = Variable('Expression')
-local RawText = Variable('RawText')
+local LiteralText = Variable('LiteralText')
 
 local grammar = CaptureToTable(Pattern({
   Template,
 
-  -- Template              <- (TemplateExpression / RawText)*
-  Template = (TemplateExpression + RawText)^0,
+  -- Template              <- (TemplateExpression / LiteralText)*
+  Template = (TemplateExpression + LiteralText)^0,
 
   -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
   TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
@@ -78,8 +78,8 @@ local grammar = CaptureToTable(Pattern({
   -- Expression            <- !'}}' .*
   Expression = (Any - Pattern('}}'))^1 / make_expression_node * Whitespace,
 
-  -- RawText               <- !'{{' .*
-  RawText = (Any - Pattern('{{'))^1 / make_text_node,
+  -- LiteralText           <- !'{{' .*
+  LiteralText = (Any - Pattern('{{'))^1 / make_text_node,
 }))
 
 -- Parse the source template into an AST.

@@ -60,9 +60,8 @@ end
 
 -- Add raw text to renderer result.
 function CodeBuilder._visit_text_node(self, node, renderer_source)
-  -- TODO: Some escaping technique will be needed for raw text.
-  -- As implemented, a closing ]] will break the renderer function.
-  local text = self:_indentation() .. 'insert(result, [[' .. node.text .. ']])'
+  local text = self:_indentation()
+             .. 'insert(result, ' .. string.format('%q', node.text) .. ')'
   table.insert(renderer_source, text)
 end
 
