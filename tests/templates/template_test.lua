@@ -49,7 +49,7 @@ hello
     assert.equal('hello\n  world', actual)
   end)
 
-  it('renders a basic expression variable #fit', function()
+  it('renders a basic expression variable', function()
     local template = Template('The answer is {{ count }}.', {}):parse()
     local context = {count = 42}
 
@@ -58,16 +58,29 @@ hello
     assert.equal('The answer is 42.', actual)
   end)
 
-  it('renders a literal string', function()
-    -- TODO: `{{ '{{' }}`
+  it('renders a literal string #fit', function()
+    local template = Template([[template {{ '{{' }} inception {{ '}}' }}]], {}):parse()
+    local context = {count = 42}
+
+    local actual = template:render(context)
+
+    assert.equal('template {{ inception }}', actual)
   end)
 
   it('renders dotted access expression variable', function()
-    -- TODO
+    -- TODO - {{ foo.bar }}
   end)
 
   it('renders subscript expression variable', function()
-    -- TODO
+    -- TODO - {{ foo['bar'] }}
+  end)
+
+  it('renders a function expression', function()
+    -- TODO - {{ foo('42') }}
+  end)
+
+  it('renders a expression variable method', function()
+    -- TODO - {{ foo.bar(baz) }}
   end)
 
   it('renders with undefined variables', function()

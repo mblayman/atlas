@@ -70,6 +70,7 @@ I've found a couple of paths that I can consider:
  * https://docs.python.org/3/library/ast.html
  * https://leafo.net/guides/parsing-expression-grammars.html
  * http://www.playwithlua.com/?p=68
+ * http://lua-users.org/wiki/LpegTutorial
 
 LPeg translation to PEG syntax (plus some general notes for better comprehension):
 

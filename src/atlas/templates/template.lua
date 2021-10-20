@@ -1,3 +1,5 @@
+local inspect = require 'inspect'
+
 local CodeBuilder = require 'atlas.templates.code_builder'
 local Parser = require 'atlas.templates.parser'
 
@@ -31,6 +33,11 @@ end
 function Template.parse(self)
   local parser = Parser()
   local ast = parser:parse(self._source)
+
+  if os.getenv('TEMPLATE_AST_DEBUG') then
+    print(inspect(ast))
+  end
+
   local builder = CodeBuilder()
   self._renderer = builder:build(ast)
   -- Make the method chainable for slightly cleaner test code.
