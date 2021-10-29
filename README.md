@@ -15,7 +15,7 @@ This is me wanting to try my hand at something new
 and mixing some existing knowledge
 that a have, namely, web frameworks.
 
-I'd like to talk my knowledge of the features
+I'd like to take my knowledge of the features
 of a web framework
 and see if I can produce one of my own.
 
