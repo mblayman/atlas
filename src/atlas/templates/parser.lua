@@ -1,7 +1,7 @@
 local lpeg = require 'lpeg'
 
-local CaptureToTable, Pattern, Range, Set, Variable =
-  lpeg.Ct, lpeg.P, lpeg.R, lpeg.S, lpeg.V
+local CaptureToTable, Capture, Pattern, Range, Set, Variable =
+  lpeg.Ct, lpeg.C, lpeg.P, lpeg.R, lpeg.S, lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -31,9 +31,9 @@ local function make_text_node(matched_text)
 end
 
 -- Build an expression node.
-local function make_expression_node(matched_expression)
-  return {node_type = 'expression', expression = matched_expression}
-end
+-- local function make_expression_node(matched_expression)
+--   return {node_type = 'expression', expression = matched_expression}
+-- end
 
 -- Pattern building blocks
 
@@ -66,6 +66,7 @@ local TemplateExpression = Variable('TemplateExpression')
 local Expression = Variable('Expression')
 local String = Variable('String')
 local SingleQuoted = Variable('SingleQuoted')
+local DoubleQuoted = Variable('DoubleQuoted')
 local LiteralText = Variable('LiteralText')
 
 local grammar = CaptureToTable(Pattern({
@@ -78,17 +79,17 @@ local grammar = CaptureToTable(Pattern({
   TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
 
   -- Expression            <- !'}}' String
-  Expression = (String - Pattern('}}'))^1 / make_expression_node,
+  Expression = (String - Pattern('}}'))^1,
 
-  -- TODO: double quoted
-  -- TODO: Are single and double going to fail with newlines?
-  -- TODO: long comment
-  -- TODO: output string into rendered version
   -- String                <- SingleQuoted / DoubleQuoted
-  String = SingleQuoted,
+  String = SingleQuoted + DoubleQuoted,
 
+  -- A string expression is treated just like a literal text node.
   -- SingleQuoted          <- ['] (!['] .)* ['] Whitespace
-  SingleQuoted = "'" * (Any - Pattern("'"))^1 * "'" * Whitespace,
+  SingleQuoted = "'" * Capture((Any - Pattern("'"))^1) * "'" * Whitespace / make_text_node,
+
+  -- DoubleQuoted          <- ["] (!["] .)* ["] Whitespace
+  DoubleQuoted = '"' * Capture((Any - Pattern('"'))^1) * '"' * Whitespace / make_text_node,
 
   -- LiteralText           <- !'{{' .*
   LiteralText = (Any - Pattern('{{'))^1 / make_text_node,

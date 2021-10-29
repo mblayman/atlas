@@ -36,7 +36,9 @@ function CodeBuilder.build(self, ast)
   table.insert(renderer_source, renderer_footer)
 
   local load_source = table.concat(renderer_source, '\n')
-  -- print(load_source)
+  if os.getenv('TEMPLATE_RENDERER_DEBUG') then
+    print(load_source)
+  end
 
   local chunk, _ = load(load_source)
   -- The renderer is accessible from running the chunk.

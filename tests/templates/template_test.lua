@@ -58,7 +58,7 @@ hello
     assert.equal('The answer is 42.', actual)
   end)
 
-  it('renders a literal string #fit', function()
+  it('renders a literal string', function()
     local template = Template([[template {{ '{{' }} inception {{ '}}' }}]], {}):parse()
     local context = {count = 42}
 
