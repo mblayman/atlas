@@ -1,7 +1,7 @@
 local lpeg = require 'lpeg'
 
-local CaptureToTable, Capture, Pattern, Range, Set, Variable =
-  lpeg.Ct, lpeg.C, lpeg.P, lpeg.R, lpeg.S, lpeg.V
+local CaptureToTable, Capture, Pattern, Set, Variable =
+  lpeg.Ct, lpeg.C, lpeg.P, lpeg.S, lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -41,24 +41,24 @@ end
 local Any = Pattern(1)
 
 -- Digit        <- [0-9]
-local Digit = Range('09')
+-- local Digit = Range('09')
 
 -- Letter       <- [A-Za-z]
-local Letter = Range('AZ', 'az')
+-- local Letter = Range('AZ', 'az')
 
 -- Whitespace   <- [ \t\r\n]*
 local Whitespace = Set(' \t\r\n') ^ 0
 
 -- NameStart    <- Letter / '_'
-local NameStart = Letter + '_'
+-- local NameStart = Letter + '_'
 
 -- NameContinue <- NameStart / Digit
-local NameContinue = NameStart + Digit
+-- local NameContinue = NameStart + Digit
 
 -- TODO: How to demark that the name is *not* reserved?
 -- TODO: restore variable Name
 -- Name         <- NameStart (NameContinue)* Whitepace
-local _ = NameStart * NameContinue^0 * Whitespace
+-- local _ = NameStart * NameContinue^0 * Whitespace
 
 -- Variables for open references within the grammar
 local Template = Variable('Template')

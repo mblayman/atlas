@@ -16,7 +16,7 @@ describe('Parser', function()
     assert.same({{node_type = 'text', text = 'hello template'}}, ast)
   end)
 
-  it('parses an expression to an AST', function()
+  it('parses an expression to an AST #xfail', function()
     local parser = Parser()
     local source = 'before {{ variable }} after'
 

@@ -49,7 +49,7 @@ hello
     assert.equal('hello\n  world', actual)
   end)
 
-  it('renders a basic expression variable', function()
+  it('renders a basic expression variable #xfail', function()
     local template = Template('The answer is {{ count }}.', {}):parse()
     local context = {count = 42}
 
@@ -58,7 +58,7 @@ hello
     assert.equal('The answer is 42.', actual)
   end)
 
-  it('renders a literal string', function()
+  it('renders a literal string with literal expressions', function()
     local template = Template([[template {{ '{{' }} inception {{ '}}' }}]], {}):parse()
     local context = {count = 42}
 

@@ -21,6 +21,40 @@ Jinja syntax: https://jinja.palletsprojects.com/en/3.0.x/templates/
 * `if/endif`
 * `for/endfor`
 
+### Expressions
+
+An expression in Atlas templates take the form of:
+
+```jinja
+{{ ... }}
+```
+
+Where `...` is an expression that will be evaluated
+and the output will be rendered.
+
+Lua has the following grammar for expressions:
+
+```
+exp ::=  nil | false | true | Numeral | LiteralString | ‘...’ | functiondef |
+         prefixexp | tableconstructor | exp binop exp | unop exp
+```
+
+Not every form of an expression makes sense to support in a template engine.
+Atlas supports:
+
+| Expression type | Support |
+| --- | --- |
+| nil | Displays literal 'nil' |
+| false | Displays literal 'false' |
+| true | Displays literal 'true' |
+| Numeral | Displays tostring representation of Numeral. TODO: The representation of a Numeral is pretty complex. How deep should this go? |
+| '...' | Varargs is not supported. |
+| functiondef | Function definition is not supported. |
+| prefixexp | TODO: function calls are in here so that needs to be supported. |
+| tableconstructor | TODO: support this and display `inspect` output |
+| exp binop exp | TODO: support this. |
+| unop exp | TODO: support this. |
+
 Extra Desired Features
 ----------------------
 
