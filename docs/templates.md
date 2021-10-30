@@ -48,10 +48,11 @@ Atlas supports:
 | false | Displays literal 'false' |
 | true | Displays literal 'true' |
 | Numeral | Displays tostring representation of Numeral. TODO: The representation of a Numeral is pretty complex. How deep should this go? |
+| LiteralString | Displays the literal string. |
 | '...' | Varargs is not supported. |
 | functiondef | Function definition is not supported. |
 | prefixexp | TODO: function calls are in here so that needs to be supported. |
-| tableconstructor | TODO: support this and display `inspect` output |
+| tableconstructor | TODO: support this and display `inspect` output (with a filter)|
 | exp binop exp | TODO: support this. |
 | unop exp | TODO: support this. |
 
