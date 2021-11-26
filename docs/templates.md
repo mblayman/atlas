@@ -104,8 +104,12 @@ I've found a couple of paths that I can consider:
  * http://www.gammon.com.au/lpeg
  * https://docs.python.org/3/library/ast.html
  * https://leafo.net/guides/parsing-expression-grammars.html
+ * https://github.com/leafo/moonscript/blob/master/moonscript/parse.moon
  * http://www.playwithlua.com/?p=68
  * http://lua-users.org/wiki/LpegTutorial
+ * http://lua-users.org/wiki/LpegRecipes UNREAD
+ * http://aosabook.org/en/500L/a-template-engine.html
+ * https://github.com/aosabook/500lines/blob/fba689d101eb5600f5c8f4d7fd79912498e950e2/template-engine/code/templite.py
 
 LPeg translation to PEG syntax (plus some general notes for better comprehension):
 
