@@ -1,75 +1,57 @@
--- A code builder transforms a template AST into a renderer function.
+-- A code builder accepts code strings to build a compiled chunk.
 local CodeBuilder = {}
 CodeBuilder.__index = CodeBuilder
 
-local function _init(_)
+local function _init(_, indent_level)
   local self = setmetatable({}, CodeBuilder)
 
+  self._code = {}
+
   -- Control how much space added to the renderer function output.
-  self._indent_level = 1
+  if indent_level then
+    self._indent_level = indent_level
+  else
+    self._indent_level = 0
+  end
 
   return self
 end
+
 setmetatable(CodeBuilder, {__call = _init})
 
-local renderer_header = [[
-local insert = table.insert
-
-return function (context)
-  -- The output is included in result and concatentated at the end.
-  local result = {}
-
-  -- The AST parsed body starts here:
-]]
-
-local renderer_footer = [[
-
-  -- The AST parsed body ends above.
-
-  return table.concat(result)
-end]]
-
--- Build the renderer function.
-function CodeBuilder.build(self, ast)
-  local renderer_source = {renderer_header}
-  self:_visit_ast(ast, renderer_source)
-  table.insert(renderer_source, renderer_footer)
-
-  local load_source = table.concat(renderer_source, '\n')
+-- Build the code into a compiled chunk.
+function CodeBuilder.build(self)
+  local load_source = tostring(self)
   if os.getenv('TEMPLATE_RENDERER_DEBUG') then
     print(load_source)
   end
 
   local chunk, _ = load(load_source)
-  -- The renderer is accessible from running the chunk.
+  -- The code is accessible from running the chunk.
   -- Lua does not return the function directly.
   return chunk()
 end
 
--- Walk the AST to build the body of the renderer function.
-function CodeBuilder._visit_ast(self, ast, renderer_source)
-  for _, node in ipairs(ast) do
-    self:_visit_node(node, renderer_source)
-  end
+-- Get a string representation of the code.
+function CodeBuilder.__tostring(self)
+  -- TODO: Iterate through _code to call tostring on anything that looks like a builder.
+  return table.concat(self._code, '\n')
 end
 
--- Dispatch to different node types.
-function CodeBuilder._visit_node(self, node, renderer_source)
-  if node.node_type == 'text' then
-    self:_visit_text_node(node, renderer_source)
-  end
+-- Add a line of code to the builder.
+function CodeBuilder.add_line(self, line)
+  local indented = string.rep('  ', self._indent_level) .. line
+  table.insert(self._code, indented)
 end
 
--- Add raw text to renderer result.
-function CodeBuilder._visit_text_node(self, node, renderer_source)
-  local text = self:_indentation()
-             .. 'insert(result, ' .. string.format('%q', node.text) .. ')'
-  table.insert(renderer_source, text)
+-- Increase the indentation level.
+function CodeBuilder.indent(self)
+  self._indent_level = self._indent_level + 1
 end
 
--- Get the appropriate amount of indentation whitespace.
-function CodeBuilder._indentation(self)
-  return string.rep('  ', self._indent_level)
+-- Decrease the indentation level.
+function CodeBuilder.dedent(self)
+  self._indent_level = self._indent_level - 1
 end
 
 return CodeBuilder

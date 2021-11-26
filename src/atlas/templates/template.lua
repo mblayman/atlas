@@ -38,10 +38,62 @@ function Template.parse(self)
     print(inspect(ast))
   end
 
-  local builder = CodeBuilder()
-  self._renderer = builder:build(ast)
+  self._renderer = self:_build(ast)
+
   -- Make the method chainable for slightly cleaner test code.
   return self
+end
+
+-- Build the renderer function.
+function Template._build(self, ast)
+  local builder = CodeBuilder()
+  self:_build_header(builder)
+  self:_visit_ast(ast, builder)
+  self:_build_footer(builder)
+  return builder:build()
+end
+
+function Template._build_header(_, builder)
+  -- Local variables for fast access.
+  builder:add_line('local insert = table.insert')
+  builder:add_line('')
+
+  -- Start the renderer function.
+  builder:add_line('return function (context)')
+  builder:indent()
+  builder:add_line('-- The output is included in result and concatentated at the end.')
+  builder:add_line('local result = {}')
+  builder:add_line('')
+  builder:add_line('-- The AST parsed body starts here:')
+  builder:add_line('')
+end
+
+function Template._build_footer(_, builder)
+  builder:add_line('')
+  builder:add_line('-- The AST parsed body ends above.')
+  builder:add_line('')
+  builder:add_line('return table.concat(result)')
+  builder:dedent()
+  builder:add_line('end')
+end
+
+-- Walk the AST to build the body of the renderer function.
+function Template._visit_ast(self, ast, builder)
+  for _, node in ipairs(ast) do
+    self:_visit_node(node, builder)
+  end
+end
+
+-- Dispatch to different node types.
+function Template._visit_node(self, node, builder)
+  if node.node_type == 'text' then
+    self:_visit_text_node(node, builder)
+  end
+end
+
+-- Add raw text to renderer result.
+function Template._visit_text_node(_, node, builder)
+  builder:add_line('insert(result, ' .. string.format('%q', node.text) .. ')')
 end
 
 return Template
