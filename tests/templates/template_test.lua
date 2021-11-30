@@ -67,6 +67,15 @@ hello
     assert.equal('template {{ inception }}', actual)
   end)
 
+  it('renders a nil expression', function()
+    local template = Template('{{ nil }}', {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('nil', actual)
+  end)
+
   it('renders dotted access expression variable', function()
     -- TODO - {{ foo.bar }}
   end)

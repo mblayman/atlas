@@ -88,7 +88,14 @@ end
 function Template._visit_node(self, node, builder)
   if node.node_type == 'text' then
     self:_visit_text_node(node, builder)
+  elseif node.node_type == 'symbol' then
+    self:_visit_symbol_node(node, builder)
   end
+end
+
+-- Add a symbol to renderer result.
+function Template._visit_symbol_node(_, node, builder)
+  builder:add_line('insert(result, "' .. node.symbol .. '")')
 end
 
 -- Add raw text to renderer result.

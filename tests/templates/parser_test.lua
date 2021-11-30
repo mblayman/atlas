@@ -72,4 +72,18 @@ world" }} after]]
     }
     assert.same(expected, ast)
   end)
+
+  it('parses a nil expression', function()
+    local parser = Parser()
+    local source = '{{ nil }}la wafer'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'symbol', symbol = 'nil'},
+      {node_type = 'text', text = 'la wafer'},
+    }
+    assert.same(expected, ast)
+  end)
+
 end)

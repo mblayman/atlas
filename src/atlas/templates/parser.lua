@@ -25,6 +25,11 @@ setmetatable(Parser, {__call = _init})
 
 -- Node constructors
 
+-- Build a symbol node.
+local function make_symbol_node(matched_symbol)
+  return {node_type = 'symbol', symbol = matched_symbol}
+end
+
 -- Build a literal text node.
 local function make_text_node(matched_text)
   return {node_type = 'text', text = matched_text}
@@ -64,6 +69,7 @@ local Whitespace = Set(' \t\r\n') ^ 0
 local Template = Variable('Template')
 local TemplateExpression = Variable('TemplateExpression')
 local Expression = Variable('Expression')
+local Nil = Variable('Nil')
 local String = Variable('String')
 local SingleQuoted = Variable('SingleQuoted')
 local DoubleQuoted = Variable('DoubleQuoted')
@@ -78,8 +84,11 @@ local grammar = CaptureToTable(Pattern({
   -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
   TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
 
-  -- Expression            <- !'}}' String
-  Expression = (String - Pattern('}}'))^1,
+  -- Expression            <- !'}}' Nil / String
+  Expression = ((Nil + String) - Pattern('}}'))^1,
+
+  -- Nil                   <- 'nil' Whitespace
+  Nil = Capture(Pattern('nil')) * Whitespace / make_symbol_node,
 
   -- String                <- SingleQuoted / DoubleQuoted
   String = SingleQuoted + DoubleQuoted,
