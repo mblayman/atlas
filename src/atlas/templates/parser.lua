@@ -103,7 +103,7 @@ local grammar = CaptureToTable(Pattern({
   True = Capture(Pattern('true')) * Whitespace / make_symbol_node,
 
   -- Numeral               <- Digit+ '.'? Digit* Whitespace
-  Numeral = Capture(Digit^1) * Whitespace / make_numeral_node,
+  Numeral = Capture(Digit^1 * Pattern('.')^-1 * Digit^0) * Whitespace / make_numeral_node,
 
   -- Digit        <- [0-9]
   Digit = Range('09'),

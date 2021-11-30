@@ -125,4 +125,17 @@ world" }} after]]
     assert.same(expected, ast)
   end)
 
+  it('parses a float expression', function()
+    local parser = Parser()
+    local source = 'Pi is {{ 3.14 }}'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'text', text = 'Pi is '},
+      {node_type = 'numeral', numeral = '3.14'},
+    }
+    assert.same(expected, ast)
+  end)
+
 end)

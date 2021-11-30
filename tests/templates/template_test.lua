@@ -103,6 +103,24 @@ hello
     assert.equal('42 is the answer.', actual)
   end)
 
+  it('renders a float expression', function()
+    local template = Template('Pi is {{ 3.14 }}', {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('Pi is 3.14', actual)
+  end)
+
+  it('renders a float without a fraction expression', function()
+    local template = Template('{{ 8. }} is still a float.', {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('8.0 is still a float.', actual)
+  end)
+
   it('renders dotted access expression variable', function()
     -- TODO - {{ foo.bar }}
   end)
