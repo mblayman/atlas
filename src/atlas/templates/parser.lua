@@ -70,6 +70,7 @@ local Template = Variable('Template')
 local TemplateExpression = Variable('TemplateExpression')
 local Expression = Variable('Expression')
 local Nil = Variable('Nil')
+local False = Variable('False')
 local String = Variable('String')
 local SingleQuoted = Variable('SingleQuoted')
 local DoubleQuoted = Variable('DoubleQuoted')
@@ -84,11 +85,14 @@ local grammar = CaptureToTable(Pattern({
   -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
   TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
 
-  -- Expression            <- !'}}' Nil / String
-  Expression = ((Nil + String) - Pattern('}}'))^1,
+  -- Expression            <- !'}}' Nil / False / String
+  Expression = ((Nil + False + String) - Pattern('}}'))^1,
 
   -- Nil                   <- 'nil' Whitespace
   Nil = Capture(Pattern('nil')) * Whitespace / make_symbol_node,
+
+  -- False                 <- 'false' Whitespace
+  False = Capture(Pattern('false')) * Whitespace / make_symbol_node,
 
   -- String                <- SingleQuoted / DoubleQuoted
   String = SingleQuoted + DoubleQuoted,

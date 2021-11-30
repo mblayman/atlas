@@ -86,4 +86,17 @@ world" }} after]]
     assert.same(expected, ast)
   end)
 
+  it('parses a false expression', function()
+    local parser = Parser()
+    local source = '{{ false }} flag'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'symbol', symbol = 'false'},
+      {node_type = 'text', text = ' flag'},
+    }
+    assert.same(expected, ast)
+  end)
+
 end)
