@@ -1,7 +1,7 @@
 local lpeg = require 'lpeg'
 
-local CaptureToTable, Capture, Pattern, Set, Variable =
-  lpeg.Ct, lpeg.C, lpeg.P, lpeg.S, lpeg.V
+local CaptureToTable, Capture, Pattern, Range, Set, Variable =
+  lpeg.Ct, lpeg.C, lpeg.P, lpeg.R, lpeg.S, lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -30,6 +30,11 @@ local function make_symbol_node(matched_symbol)
   return {node_type = 'symbol', symbol = matched_symbol}
 end
 
+-- Build a numeral node.
+local function make_numeral_node(matched_numeral)
+  return {node_type = 'numeral', numeral = matched_numeral}
+end
+
 -- Build a literal text node.
 local function make_text_node(matched_text)
   return {node_type = 'text', text = matched_text}
@@ -44,9 +49,6 @@ end
 
 -- Any          <- .
 local Any = Pattern(1)
-
--- Digit        <- [0-9]
--- local Digit = Range('09')
 
 -- Letter       <- [A-Za-z]
 -- local Letter = Range('AZ', 'az')
@@ -72,6 +74,8 @@ local Expression = Variable('Expression')
 local Nil = Variable('Nil')
 local False = Variable('False')
 local True = Variable('True')
+local Numeral = Variable('Numeral')
+local Digit = Variable('Digit')
 local String = Variable('String')
 local SingleQuoted = Variable('SingleQuoted')
 local DoubleQuoted = Variable('DoubleQuoted')
@@ -86,8 +90,8 @@ local grammar = CaptureToTable(Pattern({
   -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
   TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
 
-  -- Expression            <- !'}}' Nil / False / String
-  Expression = ((Nil + False + True + String) - Pattern('}}'))^1,
+  -- Expression            <- !'}}' Nil / False / Numeral / String
+  Expression = ((Nil + False + True + Numeral + String) - Pattern('}}'))^1,
 
   -- Nil                   <- 'nil' Whitespace
   Nil = Capture(Pattern('nil')) * Whitespace / make_symbol_node,
@@ -97,6 +101,12 @@ local grammar = CaptureToTable(Pattern({
 
   -- True                  <- 'true' Whitespace
   True = Capture(Pattern('true')) * Whitespace / make_symbol_node,
+
+  -- Numeral               <- Digit+ '.'? Digit* Whitespace
+  Numeral = Capture(Digit^1) * Whitespace / make_numeral_node,
+
+  -- Digit        <- [0-9]
+  Digit = Range('09'),
 
   -- String                <- SingleQuoted / DoubleQuoted
   String = SingleQuoted + DoubleQuoted,

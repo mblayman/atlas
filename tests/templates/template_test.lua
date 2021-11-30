@@ -94,6 +94,15 @@ hello
     assert.equal('true', actual)
   end)
 
+  it('renders an integer expression', function()
+    local template = Template('{{ 42 }} is the answer.', {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('42 is the answer.', actual)
+  end)
+
   it('renders dotted access expression variable', function()
     -- TODO - {{ foo.bar }}
   end)

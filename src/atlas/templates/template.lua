@@ -90,12 +90,19 @@ function Template._visit_node(self, node, builder)
     self:_visit_text_node(node, builder)
   elseif node.node_type == 'symbol' then
     self:_visit_symbol_node(node, builder)
+  elseif node.node_type == 'numeral' then
+    self:_visit_numeral_node(node, builder)
   end
 end
 
 -- Add a symbol to renderer result.
 function Template._visit_symbol_node(_, node, builder)
   builder:add_line('insert(result, "' .. node.symbol .. '")')
+end
+
+-- Add a numeral to renderer result.
+function Template._visit_numeral_node(_, node, builder)
+  builder:add_line('insert(result, ' .. node.numeral .. ')')
 end
 
 -- Add raw text to renderer result.

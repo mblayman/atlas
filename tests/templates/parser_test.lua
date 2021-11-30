@@ -112,4 +112,17 @@ world" }} after]]
     assert.same(expected, ast)
   end)
 
+  it('parses an integer expression', function()
+    local parser = Parser()
+    local source = '{{ 42 }} is the answer.'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'numeral', numeral = '42'},
+      {node_type = 'text', text = ' is the answer.'},
+    }
+    assert.same(expected, ast)
+  end)
+
 end)
