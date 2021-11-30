@@ -85,6 +85,15 @@ hello
     assert.equal('false', actual)
   end)
 
+  it('renders a true expression', function()
+    local template = Template('{{ true }}', {}):parse()
+    local context = {}
+
+    local actual = template:render(context)
+
+    assert.equal('true', actual)
+  end)
+
   it('renders dotted access expression variable', function()
     -- TODO - {{ foo.bar }}
   end)

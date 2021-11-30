@@ -99,4 +99,17 @@ world" }} after]]
     assert.same(expected, ast)
   end)
 
+  it('parses a true expression', function()
+    local parser = Parser()
+    local source = '{{ true }}r words'
+
+    local ast = parser:parse(source)
+
+    local expected = {
+      {node_type = 'symbol', symbol = 'true'},
+      {node_type = 'text', text = 'r words'},
+    }
+    assert.same(expected, ast)
+  end)
+
 end)
