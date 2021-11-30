@@ -47,7 +47,7 @@ Atlas supports:
 | nil | Displays literal 'nil' |
 | false | Displays literal 'false' |
 | true | Displays literal 'true' |
-| Numeral | Displays tostring representation of Numeral. TODO: The representation of a Numeral is pretty complex. How deep should this go? |
+| Numeral | Displays tostring representation of Numeral. |
 | LiteralString | Displays the literal string. |
 | '...' | Varargs is not supported. |
 | functiondef | Function definition is not supported. |

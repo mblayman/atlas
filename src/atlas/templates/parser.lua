@@ -70,6 +70,7 @@ local Whitespace = Set(' \t\r\n') ^ 0
 -- Variables for open references within the grammar
 local Template = Variable('Template')
 local TemplateExpression = Variable('TemplateExpression')
+local ExpressionContent = Variable('ExpressionContent')
 local Expression = Variable('Expression')
 local Nil = Variable('Nil')
 local False = Variable('False')
@@ -88,10 +89,15 @@ local grammar = CaptureToTable(Pattern({
   Template = (TemplateExpression + LiteralText)^0,
 
   -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
-  TemplateExpression = '{{' * Whitespace * Expression * Whitespace * '}}',
+  TemplateExpression = '{{' * Whitespace * ExpressionContent * Whitespace * '}}',
 
-  -- Expression            <- !'}}' Nil / False / Numeral / String
-  Expression = ((Nil + False + True + Numeral + String) - Pattern('}}'))^1,
+  -- TODO: It's likely that I won't need to check for the closing }}
+  -- after Expression is fully fleshed out.
+  -- ExpressionContent     <- !'}}' Expression
+  ExpressionContent = (Expression - Pattern('}}'))^1,
+
+  -- Expression            <- Nil / False / Numeral / String
+  Expression = Nil + False + True + Numeral + String,
 
   -- Nil                   <- 'nil' Whitespace
   Nil = Capture(Pattern('nil')) * Whitespace / make_symbol_node,
