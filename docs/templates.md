@@ -52,7 +52,7 @@ Atlas supports:
 | '...' | Varargs is not supported. |
 | functiondef | Function definition is not supported. |
 | prefixexp | TODO: function calls are in here so that needs to be supported. |
-| tableconstructor | TODO: support this and display `inspect` output (with a filter)|
+| tableconstructor | TODO: support this because args can contain an expression. |
 | exp binop exp | TODO: support this. |
 | unop exp | TODO: support this. |
 
@@ -61,6 +61,7 @@ Extra Desired Features
 
 * Autoescape of special characters
 * Filters `{{ value|some_filter }}`
+  * `inspect` filter to pretty print a table
 
 Environment
 -----------
