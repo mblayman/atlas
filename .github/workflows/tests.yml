@@ -28,5 +28,5 @@ jobs:
 
     - name: test
       run: |
-        make coverage | tee test.out
-        cat test.out | grep Total | grep 100.00%
+        make coverage
+        cat luacov.report.out | grep Total | grep 100.00%
