@@ -15,16 +15,17 @@ jobs:
 
     - uses: leafo/gh-actions-luarocks@v4.0.0
 
+    - name: Cache Lua packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.GITHUB_WORKSPACE }}/.luarocks
+        key: lua-${{ hashFiles('atlas-dev-1.rockspec') }}
+
     - name: build
-      run: |
-        luarocks install busted
-        luarocks install luacheck
-        luarocks install LuaCov
-        luarocks build
+      run: make build
 
     - name: lint
-      run: |
-        luacheck src tests
+      run: .luarocks/bin/luacheck src tests
 
     - name: test
       run: |
