@@ -9,7 +9,10 @@ local function _init(_, indent_level)
 
   -- Control how much space added to the renderer function output.
   if indent_level then
+    -- TODO: use indent_level
+    -- luacov: disable
     self._indent_level = indent_level
+    -- luacov: enable
   else
     self._indent_level = 0
   end
@@ -23,7 +26,9 @@ setmetatable(CodeBuilder, {__call = _init})
 function CodeBuilder.build(self)
   local load_source = tostring(self)
   if os.getenv('TEMPLATE_RENDERER_DEBUG') then
+    -- luacov: disable
     print(load_source)
+    -- luacov: enable
   end
 
   local chunk, _ = load(load_source)

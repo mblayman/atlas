@@ -35,7 +35,9 @@ function Template.parse(self)
   local ast = parser:parse(self._source)
 
   if os.getenv('TEMPLATE_AST_DEBUG') then
+    -- luacov: disable
     print(inspect(ast))
+    -- luacov: enable
   end
 
   self._renderer = self:_build(ast)
