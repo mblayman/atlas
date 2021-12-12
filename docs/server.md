@@ -45,9 +45,16 @@ Having done little async work, I'm in for a lot of learning.
 
 What's next?
 
+* Read `libuv` docs.
+  http://docs.libuv.org/en/v1.x/
 * Experiment with `luv` to process network data.
   The experiment is successful when a "Hello World" appears in the browser.
+  https://github.com/luvit/luv/blob/master/docs.md
 * Study Uvicorn.
  * What if Lua had an ASGI-like interface?
  * What would ASGI look like in Lua that would be different than Python?
+   https://asgi.readthedocs.io/en/latest/specs/www.html
 * Start an `atlas` binary. `atlas serve` would be a good first command.
+* Maybe use lua-http for HTTP parsing?
+  https://daurnimator.github.io/lua-http/0.4/
+* Use https://github.com/mpeterv/argparse for argument parsing.
