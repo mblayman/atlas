@@ -18,7 +18,7 @@ jobs:
     - name: Cache Lua packages
       uses: actions/cache@v2
       with:
-        path: ${{ env.GITHUB_WORKSPACE }}/.luarocks
+        path: ${{ github.workspace }}/.luarocks
         key: lua-${{ hashFiles('atlas-dev-1.rockspec') }}
 
     - name: build
