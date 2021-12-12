@@ -27,6 +27,9 @@ jobs:
     - name: lint
       run: .luarocks/bin/luacheck src tests
 
+    - name: style
+      run: "find src tests -name '*.lua' -print0 | xargs -0 .luarocks/bin/lua-format --check"
+
     - name: test
       run: |
         make coverage

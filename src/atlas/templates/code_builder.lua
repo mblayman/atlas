@@ -25,7 +25,7 @@ setmetatable(CodeBuilder, {__call = _init})
 -- Build the code into a compiled chunk.
 function CodeBuilder.build(self)
   local load_source = tostring(self)
-  if os.getenv('TEMPLATE_RENDERER_DEBUG') then
+  if os.getenv("TEMPLATE_RENDERER_DEBUG") then
     -- luacov: disable
     print(load_source)
     -- luacov: enable
@@ -40,23 +40,19 @@ end
 -- Get a string representation of the code.
 function CodeBuilder.__tostring(self)
   -- TODO: Iterate through _code to call tostring on anything that looks like a builder.
-  return table.concat(self._code, '\n')
+  return table.concat(self._code, "\n")
 end
 
 -- Add a line of code to the builder.
 function CodeBuilder.add_line(self, line)
-  local indented = string.rep('  ', self._indent_level) .. line
+  local indented = string.rep("  ", self._indent_level) .. line
   table.insert(self._code, indented)
 end
 
 -- Increase the indentation level.
-function CodeBuilder.indent(self)
-  self._indent_level = self._indent_level + 1
-end
+function CodeBuilder.indent(self) self._indent_level = self._indent_level + 1 end
 
 -- Decrease the indentation level.
-function CodeBuilder.dedent(self)
-  self._indent_level = self._indent_level - 1
-end
+function CodeBuilder.dedent(self) self._indent_level = self._indent_level - 1 end
 
 return CodeBuilder

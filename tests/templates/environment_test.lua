@@ -1,9 +1,13 @@
-local Environment = require 'atlas.templates.environment'
+local Environment = require "atlas.templates.environment"
 
-describe('Environment', function()
-  it('constructs an instance', function()
-    local environment = Environment()
+describe(
+  "Environment", function()
+    it(
+      "constructs an instance", function()
+        local environment = Environment()
 
-    assert.are.equal(Environment, getmetatable(environment))
-  end)
-end)
+        assert.are.equal(Environment, getmetatable(environment))
+      end
+    )
+  end
+)
