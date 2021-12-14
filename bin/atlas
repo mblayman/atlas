@@ -1,0 +1,6 @@
+#!/usr/bin/env lua
+
+local main = require "atlas.main"
+main.main(arg)
+
+-- vim: set filetype=lua:
