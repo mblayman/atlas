@@ -1,7 +1,3 @@
-local function main(args)
-  print('hello world', args)
-end
+local function main(args) print("hello world", args) end
 
-return {
-  main = main,
-}
+return {main = main}
