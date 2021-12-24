@@ -40,4 +40,4 @@ jobs:
     - name: test
       run: |
         make coverage
-        cat luacov.report.out | grep Total | grep 100.00%
+        cat luacov.report.out | grep Total | grep 100.00% > /dev/null
