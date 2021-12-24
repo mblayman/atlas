@@ -6,6 +6,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      # LuaFormat builds an unneeded test executable. Save time by disabling that.
+      BUILD_TESTS: OFF
+
     steps:
     - uses: actions/checkout@master
 
