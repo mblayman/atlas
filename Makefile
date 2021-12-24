@@ -4,8 +4,8 @@
 # This isn't great because it hides tests instead of skipping them
 # and showing that they were skipped.
 coverage:
-	.luarocks/bin/busted --exclude-tags xfail
-	.luarocks/bin/luacov src
+	busted --exclude-tags xfail
+	luacov src
 	cat luacov.report.out
 
 build:

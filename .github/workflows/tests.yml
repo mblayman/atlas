@@ -6,6 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      PATH: "${{ github.workspace }}/.luarocks/bin:${{ env.PATH}}"
+
     steps:
     - uses: actions/checkout@master
 
@@ -25,10 +28,10 @@ jobs:
       run: make build
 
     - name: lint
-      run: .luarocks/bin/luacheck src tests
+      run: luacheck src tests
 
     - name: style
-      run: "find src tests -name '*.lua' -print0 | xargs -0 .luarocks/bin/lua-format --check"
+      run: "find src tests -name '*.lua' -print0 | xargs -0 lua-format --check"
 
     - name: test
       run: |
