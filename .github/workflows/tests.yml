@@ -6,9 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      PATH: "${{ github.workspace }}/.luarocks/bin:${{ env.PATH}}"
-
     steps:
     - uses: actions/checkout@master
 
@@ -23,6 +20,9 @@ jobs:
       with:
         path: ${{ github.workspace }}/.luarocks
         key: lua-${{ hashFiles('atlas-dev-1.rockspec') }}
+
+    - name: set path
+      run: echo "${{ github.workspace }}/.luarocks/bin" >> $GITHUB_PATH
 
     - name: build
       run: make build
