@@ -6,7 +6,7 @@
 coverage:
 	busted --exclude-tags xfail
 	luacov src
-	cat luacov.report.out
+	@tail -n+$$(cat luacov.report.out | grep -m 1 -n 'Summary' | cut -d: -f 1) luacov.report.out
 
 build:
 	luarocks install --tree .luarocks busted
