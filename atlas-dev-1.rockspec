@@ -16,6 +16,7 @@ dependencies = {
   "lua >= 5.1, < 5.5",
   "inspect",
   "lpeg",
+  "luv",
 }
 
 build = {
