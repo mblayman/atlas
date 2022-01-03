@@ -82,58 +82,54 @@ local SingleQuoted = Variable("SingleQuoted")
 local DoubleQuoted = Variable("DoubleQuoted")
 local LiteralText = Variable("LiteralText")
 
-local grammar = CaptureToTable(
-                  Pattern(
-                    {
-      Template,
+local grammar = CaptureToTable(Pattern({
+  Template,
 
-      -- Template              <- (TemplateExpression / LiteralText)*
-      Template = (TemplateExpression + LiteralText) ^ 0,
+  -- Template              <- (TemplateExpression / LiteralText)*
+  Template = (TemplateExpression + LiteralText) ^ 0,
 
-      -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
-      TemplateExpression = "{{" * Whitespace * ExpressionContent * Whitespace * "}}",
+  -- TemplateExpression    <- '{{' Whitespace Expression Whitespace '}}'
+  TemplateExpression = "{{" * Whitespace * ExpressionContent * Whitespace * "}}",
 
-      -- TODO: It's likely that I won't need to check for the closing }}
-      -- after Expression is fully fleshed out.
-      -- ExpressionContent     <- !'}}' Expression
-      ExpressionContent = (Expression - Pattern("}}")) ^ 1,
+  -- TODO: It's likely that I won't need to check for the closing }}
+  -- after Expression is fully fleshed out.
+  -- ExpressionContent     <- !'}}' Expression
+  ExpressionContent = (Expression - Pattern("}}")) ^ 1,
 
-      -- Expression            <- Nil / False / Numeral / String
-      Expression = Nil + False + True + Numeral + String,
+  -- Expression            <- Nil / False / Numeral / String
+  Expression = Nil + False + True + Numeral + String,
 
-      -- Nil                   <- 'nil' Whitespace
-      Nil = Capture(Pattern("nil")) * Whitespace / make_symbol_node,
+  -- Nil                   <- 'nil' Whitespace
+  Nil = Capture(Pattern("nil")) * Whitespace / make_symbol_node,
 
-      -- False                 <- 'false' Whitespace
-      False = Capture(Pattern("false")) * Whitespace / make_symbol_node,
+  -- False                 <- 'false' Whitespace
+  False = Capture(Pattern("false")) * Whitespace / make_symbol_node,
 
-      -- True                  <- 'true' Whitespace
-      True = Capture(Pattern("true")) * Whitespace / make_symbol_node,
+  -- True                  <- 'true' Whitespace
+  True = Capture(Pattern("true")) * Whitespace / make_symbol_node,
 
-      -- Numeral               <- Digit+ '.'? Digit* Whitespace
-      Numeral = Capture(Digit ^ 1 * Pattern(".") ^ -1 * Digit ^ 0) * Whitespace /
-        make_numeral_node,
+  -- Numeral               <- Digit+ '.'? Digit* Whitespace
+  Numeral = Capture(Digit ^ 1 * Pattern(".") ^ -1 * Digit ^ 0) * Whitespace /
+    make_numeral_node,
 
-      -- Digit        <- [0-9]
-      Digit = Range("09"),
+  -- Digit        <- [0-9]
+  Digit = Range("09"),
 
-      -- String                <- SingleQuoted / DoubleQuoted
-      String = SingleQuoted + DoubleQuoted,
+  -- String                <- SingleQuoted / DoubleQuoted
+  String = SingleQuoted + DoubleQuoted,
 
-      -- A string expression is treated just like a literal text node.
-      -- SingleQuoted          <- ['] (!['] .)* ['] Whitespace
-      SingleQuoted = "'" * Capture((Any - Pattern("'")) ^ 1) * "'" * Whitespace /
-        make_text_node,
+  -- A string expression is treated just like a literal text node.
+  -- SingleQuoted          <- ['] (!['] .)* ['] Whitespace
+  SingleQuoted = "'" * Capture((Any - Pattern("'")) ^ 1) * "'" * Whitespace /
+    make_text_node,
 
-      -- DoubleQuoted          <- ["] (!["] .)* ["] Whitespace
-      DoubleQuoted = "\"" * Capture((Any - Pattern("\"")) ^ 1) * "\"" * Whitespace /
-        make_text_node,
+  -- DoubleQuoted          <- ["] (!["] .)* ["] Whitespace
+  DoubleQuoted = "\"" * Capture((Any - Pattern("\"")) ^ 1) * "\"" * Whitespace /
+    make_text_node,
 
-      -- LiteralText           <- !'{{' .*
-      LiteralText = (Any - Pattern("{{")) ^ 1 / make_text_node,
-    }
-                  )
-                )
+  -- LiteralText           <- !'{{' .*
+  LiteralText = (Any - Pattern("{{")) ^ 1 / make_text_node,
+}))
 
 -- Parse the source template into an AST.
 function Parser.parse(_, source) return grammar:match(source) end
