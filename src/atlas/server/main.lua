@@ -1,5 +1,17 @@
--- Things to do
--- 1. Accept an app. This notation can be exactly like Python 'some.module:callable'
--- 2. Create a config from the arguments.
--- 3. Create the server.
--- 4. Run the server.
+local Server = require "atlas.server.server"
+
+-- Run the `serve` command.
+local function run(config)
+  local server = Server()
+
+  local status
+  status = server:set_up(config)
+  if status ~= 0 then return status end
+
+  local has_active_handles = server:run()
+
+  if has_active_handles then status = 1 end
+  return status
+end
+
+return {run = run}
