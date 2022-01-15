@@ -58,3 +58,4 @@ What's next?
 * Maybe use lua-http for HTTP parsing?
   https://daurnimator.github.io/lua-http/0.4/
 * Use https://github.com/mpeterv/argparse for argument parsing.
+* https://github.com/ms-jpq/lua-async-await/blob/neo/lua/async.lua

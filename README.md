@@ -58,8 +58,3 @@ This order sounds appealing to me.
 * LuaCheck for lint. `luarocks install LuaCheck`
 * Here is the pre-commit PR for Lua support:
   https://github.com/pre-commit/pre-commit/pull/2158
-
-## Future tools
-
-* `.rockspec` to make a proper Lua rock package?
-  This could help with dependency management.
