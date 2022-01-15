@@ -47,6 +47,8 @@ function Server.set_up(self, config)
     return 1
   end
 
+  print("Listening for requests on http://" .. config.host .. ":" .. config.port)
+
   local listen_callback = function(listen_callback_err)
     -- TODO: This is a callback so how is this supposed to clean up properly
     -- if there is an error?
@@ -89,9 +91,6 @@ end
 -- Run the uv loop.
 --
 -- The loop status of whether there are still active handles or requests is returned.
-function Server.run(_)
-  print("Listening for requests")
-  return luv.run()
-end
+function Server.run(_) return luv.run() end
 
 return Server
