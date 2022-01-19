@@ -42,3 +42,6 @@ luac.out
 
 # Vim
 *.sw*
+
+# Python
+venv/

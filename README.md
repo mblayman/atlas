@@ -58,3 +58,9 @@ This order sounds appealing to me.
 * LuaCheck for lint. `luarocks install LuaCheck`
 * Here is the pre-commit PR for Lua support:
   https://github.com/pre-commit/pre-commit/pull/2158
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pre-commit install

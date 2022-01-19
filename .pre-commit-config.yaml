@@ -1,0 +1,5 @@
+repos:
+- repo: https://github.com/lunarmodules/luacheck
+  rev: "0d4151294304a42edae53b6a0ee107490759b518"
+  hooks:
+  - id: luacheck
