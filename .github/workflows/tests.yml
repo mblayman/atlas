@@ -27,9 +27,6 @@ jobs:
     - name: build
       run: make build
 
-    - name: style
-      run: "find src tests -name '*.lua' -print0 | xargs -0 lua-format --check"
-
     - name: test
       run: |
         make coverage
