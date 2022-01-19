@@ -59,3 +59,14 @@ What's next?
   https://daurnimator.github.io/lua-http/0.4/
 * Use https://github.com/mpeterv/argparse for argument parsing.
 * https://github.com/ms-jpq/lua-async-await/blob/neo/lua/async.lua
+
+
+ASGI Notes:
+
+* Starlette Response calls ASGI `send` function with:
+  * `await send({type: http.response.start, ...})` then
+  * `await send({type: http.response.body, ...})` then
+  * https://github.com/encode/starlette/blob/2d6ddd386199e9e6cf0df0849e1de7d1a8c86b9d/starlette/responses.py#L152
+* Starlette is less clear about the `receive` side.
+  There are a handful of spots that call `receive`,
+  and I'm not sure which is the "standard" one.
