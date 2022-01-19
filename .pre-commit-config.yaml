@@ -1,5 +1,13 @@
+ci:
+  # The compilation time is too long so CI hits a timeout.
+  skip: [luaformatter]
+
 repos:
 - repo: https://github.com/lunarmodules/luacheck
   rev: "0d4151294304a42edae53b6a0ee107490759b518"
   hooks:
   - id: luacheck
+- repo: https://github.com/mblayman/LuaFormatter
+  rev: "ad94bea01ca027ca46541af727e15d002aa5ce74"
+  hooks:
+  - id: luaformatter
