@@ -11,6 +11,7 @@ coverage:
 build:
 	luarocks install --tree .luarocks busted
 	luarocks install --tree .luarocks LuaCov
+	luarocks install --tree .luarocks --server https://luarocks.org/dev luaformatter
 	luarocks build --tree .luarocks
 
 atlas:
@@ -18,4 +19,3 @@ atlas:
 
 bootstrap:
 	luarocks install --tree .luarocks luacheck
-	luarocks install --tree .luarocks --server https://luarocks.org/dev luaformatter
