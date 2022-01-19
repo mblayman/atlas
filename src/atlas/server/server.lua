@@ -30,16 +30,25 @@ Hello World!]])
   end)
 end
 
--- Set up the server to handle requests.
+-- Make the underlying TCP server.
 --
--- Return 0 if setup is successful or 1 if it failed.
-function Server.set_up(self, config)
+-- This allows stubbing of the server in tests.
+function Server._make_tcp_server(self)
   local tcp_err
-  self._server, tcp_err = luv.new_tcp() -- TODO: Should this pass a family flag argument?
+  self._server, tcp_err = luv.new_tcp()
   if tcp_err then
     print("Failed to create a TCP server", tcp_err)
     return 1
   end
+  return 0
+end
+
+-- Set up the server to handle requests.
+--
+-- Return 0 if setup is successful or 1 if it failed.
+function Server.set_up(self, config)
+  local tcp_server_status = self:_make_tcp_server()
+  if tcp_server_status ~= 0 then return tcp_server_status end
 
   local bind_status, bind_err = self._server:bind(config.host, config.port)
   if bind_status ~= 0 then
