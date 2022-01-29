@@ -45,3 +45,6 @@ luac.out
 
 # Python
 venv/
+
+# Environment
+.env
