@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ATLAS_CONFIG=app.config atlas $@

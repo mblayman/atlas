@@ -1,4 +1,7 @@
-local luv = require("luv")
+local luv = require "luv"
+
+local logging = require "atlas.logging"
+local logger = logging.get_logger("atlas.server")
 
 local Server = {}
 Server.__index = Server
@@ -56,7 +59,7 @@ function Server.set_up(self, config)
     return 1
   end
 
-  print("Listening for requests on http://" .. config.host .. ":" .. config.port)
+  logger.log("Listening for requests on http://" .. config.host .. ":" .. config.port)
 
   local listen_callback = function(listen_callback_err)
     -- TODO: This is a callback so how is this supposed to clean up properly
@@ -88,7 +91,7 @@ function Server.set_up(self, config)
   end
 
   local on_sigint = function(_)
-    print("\nShutting down")
+    logger.log("Shutting down")
     -- TODO: better cleanup? close existing handlers?
     os.exit(1)
   end
