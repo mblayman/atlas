@@ -2,7 +2,7 @@ package = "atlas"
 version = "dev-1"
 
 source = {
-  url = "git+ssh://git@github.com/mblayman/atlas.git"
+  url = "git+https://git@github.com/mblayman/atlas.git"
 }
 
 description = {
