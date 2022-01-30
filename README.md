@@ -65,3 +65,12 @@ source venv/bin/activate
 pip install -r requirements.txt
 pre-commit install
 ```
+
+## Release notes
+
+```
+luarocks new_version <previous rockspec>
+# Upload expects branch name of v0.1 format
+# Example
+luarocks upload rockspecs/atlas-0.1-1.rockspec --api-key=$LUAROCKS_KEY
+```
