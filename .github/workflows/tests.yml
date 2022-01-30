@@ -34,3 +34,5 @@ jobs:
       run: |
         make coverage
         cat luacov.report.out | grep Total | grep 100.00% > /dev/null
+      env:
+        ATLAS_CONFIG: tests.config
