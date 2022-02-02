@@ -1,20 +1,15 @@
--- Atlas configuration
-local default_config = {
-  -- The log file handle for the logger
-  log_file = io.stdout,
-}
+-- Atlas configuration interface
+local Configuration = require "atlas.configuration"
 
+local user_config = nil
 local user_config_module_path = os.getenv("ATLAS_CONFIG")
-if not user_config_module_path then os.exit(false) end
-local user_config = require(user_config_module_path)
-
--- Shallow copy the defaults.
-local config = {}
-for config_key, config_value in pairs(default_config) do
-  config[config_key] = config_value
+if user_config_module_path then
+  -- print("The ATLAS_CONFIG environment variable is not set.")
+  -- print("Please set the variable to continue.")
+  -- os.exit(false)
+  user_config = require(user_config_module_path)
 end
 
--- Merge.
-for user_key, user_value in pairs(user_config) do config[user_key] = user_value end
+local config = Configuration(user_config)
 
 return config
