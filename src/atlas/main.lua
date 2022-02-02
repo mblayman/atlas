@@ -1,6 +1,9 @@
 local argparse = require "argparse"
 
+local logging = require "atlas.logging"
 local server_main = require "atlas.server.main"
+
+local logger = logging.get_logger("atlas.main")
 
 -- The dispatch table of run functions
 local command_dispatch = {serve = server_main.run}
@@ -25,24 +28,32 @@ local function build_parser()
   return parser
 end
 
-local function execute(config, parser)
-  -- TODO: Write tests for this function.
-  -- print output messes up the test results so there must be some way to catch
-  -- that output.
-  -- I bet I can mock the dispatch table with a noop run function.
+-- Execute the command defined in the parser config.
+local function execute(config, parser, user_config_module_path)
+  local status = 0
 
-  -- luacov: disable
   -- The require command true mode is harsh and doesn't tell what subcommands exist.
   -- Check if there is no command and show the help if appropriate.
-  local status = 0
   if config.command == nil then
-    print(parser:get_help())
-  elseif command_dispatch[config.command] then
-    status = command_dispatch[config.command](config)
+    logger.log(parser:get_help(), true)
+
+  else
+    -- TODO: The need for a user config should vary by command,
+    -- but checking here is fine for now.
+    if not user_config_module_path then
+      logger.log("The ATLAS_CONFIG environment variable is not set.")
+      logger.log("Please set the variable to continue.")
+      status = 1
+    else
+      -- TODO: Write tests for this function.
+      -- I bet I can mock the dispatch table with a noop run function.
+      -- luacov: disable
+      status = command_dispatch[config.command](config)
+      -- luacov: enable
+    end
   end
 
   return status
-  -- luacov: enable
 end
 
 -- Get this party started.
@@ -51,9 +62,9 @@ local function main(args)
   -- luacov: disable
   local parser = build_parser()
   local config = parser:parse(args)
-  local status = execute(config, parser)
+  local status = execute(config, parser, os.getenv("ATLAS_CONFIG"))
   os.exit(status)
   -- luacov: enable
 end
 
-return {main = main, build_parser = build_parser}
+return {main = main, build_parser = build_parser, execute = execute}

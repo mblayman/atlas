@@ -57,3 +57,26 @@ describe("config parser", function()
     end)
   end)
 end)
+
+describe("execute", function()
+  it("shows help when no command is provided", function()
+    local config = {command = nil}
+    local parser = {}
+    stub(parser, "get_help").returns("")
+
+    local status = main.execute(config, parser)
+
+    assert.stub(parser.get_help).called()
+    assert.equal(0, status)
+  end)
+
+  it("fails when the user config is missing", function()
+    local config = {command = "serve"}
+    local parser = {}
+    local user_config_module_path = nil
+
+    local status = main.execute(config, parser, user_config_module_path)
+
+    assert.equal(1, status)
+  end)
+end)
