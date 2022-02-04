@@ -1,3 +1,6 @@
+local assert = require "luassert.assert"
+local stub = require "luassert.stub"
+
 local Server = require "atlas.server.server"
 
 local function build_mock_server()

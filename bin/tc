@@ -1,0 +1,3 @@
+#!/bin/bash
+# tc - *t*est with *c*overage
+make coverage

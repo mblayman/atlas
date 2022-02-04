@@ -1,3 +1,5 @@
+local assert = require "luassert.assert"
+
 local Environment = require "atlas.templates.environment"
 
 describe("Environment", function()

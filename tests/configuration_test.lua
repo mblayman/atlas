@@ -1,3 +1,5 @@
+local assert = require "luassert.assert"
+
 local Configuration = require "atlas.configuration"
 
 describe("Configuration", function()

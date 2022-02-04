@@ -1,3 +1,6 @@
+local assert = require "luassert.assert"
+local stub = require "luassert.stub"
+
 local main = require "atlas.main"
 
 describe("config parser", function()

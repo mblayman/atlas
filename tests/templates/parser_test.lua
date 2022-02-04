@@ -1,3 +1,5 @@
+local assert = require "luassert.assert"
+
 local Parser = require "atlas.templates.parser"
 
 describe("Parser", function()

@@ -1,3 +1,5 @@
+local assert = require "luassert.assert"
+
 local Template = require "atlas.templates.template"
 
 describe("Template", function()
