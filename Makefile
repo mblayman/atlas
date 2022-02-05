@@ -14,10 +14,10 @@ build:
 	luarocks install --tree .luarocks busted
 	luarocks install --tree .luarocks LuaCov
 	luarocks install --tree .luarocks --server https://luarocks.org/dev luaformatter
-	luarocks build --tree .luarocks
+	luarocks make --tree .luarocks
 
 atlas:
-	luarocks build --tree .luarocks
+	luarocks make --tree .luarocks
 
 bootstrap:
 	luarocks install --tree .luarocks luacheck
