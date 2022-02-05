@@ -1,5 +1,7 @@
 .PHONY: coverage t
 
+lr = luarocks --tree .luarocks
+
 coverage: t
 	luacov src
 	@tail -n+$$(cat luacov.report.out | grep -m 1 -n 'Summary' | cut -d: -f 1) luacov.report.out
@@ -11,13 +13,13 @@ t:
 	busted --exclude-tags xfail
 
 build:
-	luarocks install --tree .luarocks busted
-	luarocks install --tree .luarocks LuaCov
-	luarocks install --tree .luarocks --server https://luarocks.org/dev luaformatter
-	luarocks make --tree .luarocks
+	$(lr) install busted
+	$(lr) install LuaCov
+	$(lr) install --server https://luarocks.org/dev luaformatter
+	$(lr) make
 
 atlas:
-	luarocks make --tree .luarocks
+	$(lr) make
 
 bootstrap:
-	luarocks install --tree .luarocks luacheck
+	$(lr) install luacheck

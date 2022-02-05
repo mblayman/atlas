@@ -1,0 +1,3 @@
+#!/bin/bash
+# Ensure actions happen against the local tree.
+luarocks --tree .luarocks $@
