@@ -1,6 +1,7 @@
 local luv = require "luv"
 
 local config = require "atlas.config"
+local fs = require "atlas.fs"
 
 -- Get a logger object configured to log to a particular logging namespace.
 --
@@ -22,13 +23,9 @@ local function get_logger(logger)
     end
 
     if luv.loop_alive() then
-      -- TODO: This is not async friendly yet.
-      -- Use a combo of uv.fs_write, callbacks, and coroutines.
-      config.log_file:write(log_line)
-      config.log_file:flush()
+      fs.write(config.log_file_fd, log_line)
     else
-      config.log_file:write(log_line)
-      config.log_file:flush()
+      luv.fs_write(config.log_file_fd, log_line)
     end
   end
 

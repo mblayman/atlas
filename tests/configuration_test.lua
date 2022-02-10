@@ -19,7 +19,7 @@ describe("Configuration", function()
   it("includes defaults", function()
     local config = Configuration()
 
-    assert.truthy(config.log_file)
+    assert.is_nil(config.log_file)
   end)
 
   it("includes a user configuration", function()

@@ -68,7 +68,11 @@ function Server.set_up(self, config)
     local client = luv.new_tcp()
     local _, accept_err = self._server:accept(client)
     assert(not accept_err, accept_err)
-    on_connection(client)
+
+    -- TODO: I don't have a good grasp on why a coroutine gets created here.
+    -- I think it's because the listen_callback is invoked the event loop
+    -- which somehow is happening outside of the main coroutine.
+    coroutine.wrap(function() on_connection(client) end)()
   end
 
   -- TODO: investigate this value. Should it be configurable? What is a good default?
@@ -91,7 +95,9 @@ function Server.set_up(self, config)
   end
 
   local on_sigint = function(_)
-    logger.log("Shutting down")
+    -- TODO: wat. For some reason, the coroutine is not yieldable here.
+    -- That prevents the logger from working.
+    -- logger.log("Shutting down")
     -- TODO: better cleanup? close existing handlers?
     os.exit(1)
   end

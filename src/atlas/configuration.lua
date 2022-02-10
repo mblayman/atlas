@@ -2,11 +2,14 @@
 --
 -- This is the implementation of the configuration interface
 -- and should be considered private API.
---
+local luv = require "luv"
+
 -- System defaults:
 local default_config = {
-  -- The log file handle for the logger
-  log_file = io.stdout,
+  -- The log file path for the logger
+  --
+  -- default: nil - logs will go to stdout
+  log_file = nil,
 }
 
 local Configuration = {}
@@ -27,6 +30,12 @@ local function _init(_, user_config)
     self.has_user_config = true
   end
 
+  if self.log_file then
+    -- TODO: Handle errors.
+    self.log_file_fd = luv.fs_open(self.log_file, "w", 0666)
+  else
+    self.log_file_fd = 1 -- stdout
+  end
   return self
 end
 setmetatable(Configuration, {__call = _init})

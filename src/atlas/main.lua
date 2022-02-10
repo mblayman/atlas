@@ -60,10 +60,12 @@ end
 local function main(args)
   -- All the pieces are testable so don't worry about the integration coverage.
   -- luacov: disable
-  local parser = build_parser()
-  local config = parser:parse(args)
-  local status = execute(config, parser, os.getenv("ATLAS_CONFIG"))
-  os.exit(status)
+  coroutine.wrap(function()
+    local parser = build_parser()
+    local config = parser:parse(args)
+    local status = execute(config, parser, os.getenv("ATLAS_CONFIG"))
+    os.exit(status)
+  end)()
   -- luacov: enable
 end
 

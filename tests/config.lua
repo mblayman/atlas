@@ -1,1 +1,1 @@
-return {log_file = io.open("/tmp/atlas.tests", "w")}
+return {log_file = "/tmp/atlas.tests"}
