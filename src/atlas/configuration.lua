@@ -8,8 +8,8 @@ local luv = require "luv"
 local default_config = {
   -- The log file path for the logger
   --
-  -- default: nil - logs will go to stdout
-  log_file = nil,
+  -- default: "" - logs will go to stdout
+  log_file = "",
 }
 
 local Configuration = {}
@@ -30,7 +30,7 @@ local function _init(_, user_config)
     self.has_user_config = true
   end
 
-  if self.log_file then
+  if self.log_file ~= "" then
     -- TODO: Handle errors.
     self.log_file_fd = luv.fs_open(self.log_file, "w", 0666)
   else
