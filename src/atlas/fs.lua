@@ -1,3 +1,6 @@
+--
+-- File system access with coroutines
+--
 local luv = require "luv"
 
 local fs = {}
@@ -14,7 +17,8 @@ end
 
 -- Write data to the specified file descriptor.
 --
--- The file descriptor is assumed to be in a writeable mode.
+-- file_descriptor: A file descriptor assumed to be in a writeable mode
+-- data: The data to write to the file
 function fs.write(file_descriptor, data)
   -- -1 is the current file offset
   luv.fs_write(file_descriptor, data, -1, make_write_callback())
