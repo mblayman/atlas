@@ -41,3 +41,21 @@ describe("Server", function()
     assert.equal(0, status)
   end)
 end)
+
+-- TODO: The log call yields and this is not running in a loop so it fails.
+-- But it will hang if I try to run the loop (I think it's listening for
+-- requests). I'm not sure how to test this right now.
+-- local main = require "atlas.server.main"
+-- describe("main", function()
+--   it("runs", function()
+--     local server = Server()
+--     stub(server, "_make_tcp_server").returns(0)
+--     stub(server, "run").returns(false)
+--     server._server = build_mock_server()
+--     local config = {host = "127.0.0.1", port = 5555}
+
+--     local status = main.run(config, server)
+
+--     assert.equal(0, status)
+--   end)
+-- end)

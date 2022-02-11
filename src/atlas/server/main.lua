@@ -1,8 +1,10 @@
 local Server = require "atlas.server.server"
 
 -- Run the `serve` command.
-local function run(config)
-  local server = Server()
+--
+-- server: A dependency injected server for testing modes
+local function run(config, server)
+  if server == nil then server = Server() end
 
   local status
   status = server:set_up(config)
