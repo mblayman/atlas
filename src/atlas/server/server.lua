@@ -1,5 +1,6 @@
 local luv = require "luv"
 
+local atlas_config = require "atlas.config"
 local logging = require "atlas.logging"
 local logger = logging.get_logger("atlas.server")
 
@@ -9,8 +10,6 @@ Server.__index = Server
 local function _init(_)
   local self = setmetatable({}, Server)
   self._server = nil
-
-  -- TODO: run_mode to control the mode argument to luv.run
 
   return self
 end
@@ -75,10 +74,8 @@ function Server.set_up(self, config)
     coroutine.wrap(function() on_connection(client) end)()
   end
 
-  -- TODO: investigate this value. Should it be configurable? What is a good default?
-  local backlog_connections = 128
-  local listen_status, listen_err = self._server:listen(backlog_connections,
-                                                        listen_callback)
+  local listen_status, listen_err = self._server:listen(
+                                      atlas_config.backlog_connections, listen_callback)
   if listen_status ~= 0 then
     print("Failed to listen to incoming connections", listen_err)
     return 1

@@ -13,6 +13,7 @@ local function get_logger(logger)
   -- The log function is context aware and will write synchronously
   -- if the event loop is not running or operate asynchronously when it is.
   --
+  -- message: The message to add to the log
   -- raw: The message should be logged without extra metadata (bool, default: false)
   local function log(message, raw)
     local log_line
