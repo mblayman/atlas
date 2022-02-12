@@ -39,7 +39,8 @@ function Server._make_tcp_server(self)
   local tcp_err
   self._server, tcp_err = luv.new_tcp()
   if tcp_err then
-    print("Failed to create a TCP server", tcp_err)
+    logger.log("Failed to create a TCP server")
+    logger.log(tcp_err)
     return 1
   end
   return 0
@@ -54,7 +55,8 @@ function Server.set_up(self, config)
 
   local bind_status, bind_err = self._server:bind(config.host, config.port)
   if bind_status ~= 0 then
-    print("Failed to bind to host and port", bind_err)
+    logger.log("Failed to bind to host and port")
+    logger.log(bind_err)
     return 1
   end
 
@@ -77,7 +79,8 @@ function Server.set_up(self, config)
   local listen_status, listen_err = self._server:listen(
                                       atlas_config.backlog_connections, listen_callback)
   if listen_status ~= 0 then
-    print("Failed to listen to incoming connections", listen_err)
+    logger.log("Failed to listen to incoming connections")
+    logger.log(listen_err)
     return 1
   end
 
@@ -87,7 +90,8 @@ function Server.set_up(self, config)
   -- This handler ensures that the clean up happens right away.
   local signal, signal_err = luv.new_signal()
   if signal_err then
-    print("Failed to set signal handler", signal_err)
+    logger.log("Failed to set signal handler")
+    logger.log(signal_err)
     return 1
   end
 
