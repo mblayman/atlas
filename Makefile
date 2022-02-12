@@ -15,6 +15,9 @@ clean:
 t:
 	busted --exclude-tags xfail
 
+tap:
+	busted --exclude-tags xfail -o tap
+
 build:
 	$(lr) install busted
 	$(lr) install LuaCov

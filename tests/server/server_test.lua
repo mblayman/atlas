@@ -2,6 +2,7 @@ local assert = require "luassert.assert"
 local stub = require "luassert.stub"
 
 local Server = require "atlas.server.server"
+local loop = require "atlas.test.loop"
 
 local function build_mock_server()
   return {bind = function() return 0 end, listen = function() return 0 end}
@@ -39,6 +40,18 @@ describe("Server", function()
     local status = server:set_up(config)
 
     assert.equal(0, status)
+    loop.close()
+  end)
+
+  it("fails on a signal creation error", function()
+    local luv = require "luv"
+    stub(luv, "new_signal").returns(nil, 1)
+    local server = Server()
+
+    local status
+    loop.run_until_done(function() status = server:_set_sigint() end)
+
+    assert.equal(1, status)
   end)
 end)
 
