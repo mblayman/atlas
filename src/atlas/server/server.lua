@@ -17,6 +17,9 @@ setmetatable(Server, {__call = _init})
 
 local function on_connection(client)
   client:read_start(function(err, data)
+    -- TODO: This will be replaced with a real implementation soon,
+    -- so don't worry about the coverage of it.
+    -- luacov: disable
     -- TODO: graceful termination
     assert(not err, err)
 
@@ -29,6 +32,7 @@ Hello World!]])
     else
       client:close()
     end
+    -- luacov: enable
   end)
 end
 
@@ -59,17 +63,16 @@ end
 
 -- Make the listen callback.
 function Server._make_listen_callback(self)
-  return function(listen_callback_err)
+  return function(err)
     -- TODO: This is a callback so how is this supposed to clean up properly
     -- if there is an error?
-    assert(not listen_callback_err, listen_callback_err)
+    assert(not err, err)
     local client = luv.new_tcp()
     local _, accept_err = self._server:accept(client)
     assert(not accept_err, accept_err)
 
-    -- TODO: I don't have a good grasp on why a coroutine gets created here.
-    -- I think it's because the listen_callback is invoked the event loop
-    -- which somehow is happening outside of the main coroutine.
+    -- Each client connection must be in a coroutine so it can yield back
+    -- to the main event loop if it has some blocking activity.
     coroutine.wrap(function() on_connection(client) end)()
   end
 end
@@ -86,6 +89,14 @@ function Server._listen(self)
   return 0
 end
 
+function Server.on_sigint(_)
+  -- TODO: wat. For some reason, the coroutine is not yieldable here.
+  -- That prevents the logger from working.
+  -- logger.log("Shutting down")
+  -- TODO: better cleanup? close existing handlers?
+  os.exit(0)
+end
+
 -- Set sigint handler.
 --
 -- Clean up immediately.
@@ -100,15 +111,7 @@ function Server._set_sigint(_)
     return 1
   end
 
-  local on_sigint = function(_)
-    -- TODO: wat. For some reason, the coroutine is not yieldable here.
-    -- That prevents the logger from working.
-    -- logger.log("Shutting down")
-    -- TODO: better cleanup? close existing handlers?
-    os.exit(0)
-  end
-  luv.signal_start(signal, "sigint", on_sigint)
-
+  luv.signal_start(signal, "sigint", Server.on_sigint)
   return 0
 end
 
