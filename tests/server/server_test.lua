@@ -123,8 +123,9 @@ describe("main", function()
     stub(server, "run").returns(false)
     server._server = build_mock_server()
     local config = {host = "127.0.0.1", port = 5555}
+    local app = {}
 
-    local status = main.run(config, server)
+    local status = main.run(config, server, app)
 
     assert.equal(1, status)
     loop.close()
@@ -133,8 +134,9 @@ describe("main", function()
   it("fails on server setup failure", function()
     local server = {set_up = function() return 42 end}
     local config = {host = "127.0.0.1", port = 5555}
+    local app = {}
 
-    local status = main.run(config, server)
+    local status = main.run(config, server, app)
 
     assert.equal(42, status)
   end)
@@ -142,9 +144,19 @@ describe("main", function()
   it("fails when active handles persist", function()
     local server = {set_up = function() return 0 end, run = function() return 1 end}
     local config = {host = "127.0.0.1", port = 5555}
+    local app = {}
+
+    local status = main.run(config, server, app)
+
+    assert.equal(1, status)
+  end)
+
+  it("loads an app", function()
+    local server = {set_up = function() return 0 end, run = function() return false end}
+    local config = {host = "127.0.0.1", port = 5555, app = "app.main:app"}
 
     local status = main.run(config, server)
 
-    assert.equal(1, status)
+    assert.equal(0, status)
   end)
 end)

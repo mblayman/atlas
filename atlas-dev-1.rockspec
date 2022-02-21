@@ -19,6 +19,7 @@ dependencies = {
   "inspect",
   "lpeg",
   "luv",
+  "penlight",
 }
 
 build = {

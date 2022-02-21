@@ -7,9 +7,10 @@ local logger = logging.get_logger("atlas.server")
 local Server = {}
 Server.__index = Server
 
-local function _init(_)
+local function _init(_, app)
   local self = setmetatable({}, Server)
   self._server = nil
+  self._app = app
 
   return self
 end
