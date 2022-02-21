@@ -4,8 +4,6 @@ local Server = require "atlas.server.server"
 --
 -- server: A dependency injected server for testing modes
 local function run(config, server)
-  -- TODO: Find a reasonable way to test this function.
-  -- luacov: disable
   if server == nil then server = Server() end
 
   local status
@@ -16,7 +14,6 @@ local function run(config, server)
 
   if has_active_handles then status = 1 end
   return status
-  -- luacov: enable
 end
 
 return {run = run}

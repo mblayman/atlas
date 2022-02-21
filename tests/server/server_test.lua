@@ -1,6 +1,7 @@
 local assert = require "luassert.assert"
 local stub = require "luassert.stub"
 
+local main = require "atlas.server.main"
 local Server = require "atlas.server.server"
 local loop = require "atlas.test.loop"
 
@@ -115,20 +116,35 @@ describe("Server", function()
   end)
 end)
 
--- TODO: The log call yields and this is not running in a loop so it fails.
--- But it will hang if I try to run the loop (I think it's listening for
--- requests). I'm not sure how to test this right now.
--- local main = require "atlas.server.main"
--- describe("main", function()
---   it("runs", function()
---     local server = Server()
---     stub(server, "_make_tcp_server").returns(0)
---     stub(server, "run").returns(false)
---     server._server = build_mock_server()
---     local config = {host = "127.0.0.1", port = 5555}
+describe("main", function()
+  it("runs", function()
+    local server = Server()
+    stub(server, "_make_tcp_server").returns(0)
+    stub(server, "run").returns(false)
+    server._server = build_mock_server()
+    local config = {host = "127.0.0.1", port = 5555}
 
---     local status = main.run(config, server)
+    local status = main.run(config, server)
 
---     assert.equal(0, status)
---   end)
--- end)
+    assert.equal(1, status)
+    loop.close()
+  end)
+
+  it("fails on server setup failure", function()
+    local server = {set_up = function() return 42 end}
+    local config = {host = "127.0.0.1", port = 5555}
+
+    local status = main.run(config, server)
+
+    assert.equal(42, status)
+  end)
+
+  it("fails when active handles persist", function()
+    local server = {set_up = function() return 0 end, run = function() return 1 end}
+    local config = {host = "127.0.0.1", port = 5555}
+
+    local status = main.run(config, server)
+
+    assert.equal(1, status)
+  end)
+end)
