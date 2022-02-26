@@ -12,8 +12,11 @@ describe("Application", function()
 
   it("is callable", function()
     local app = Application()
+    local scope = {}
+    local receive = function() end
+    local send = function() end
 
-    local ret = app()
+    local ret = app(scope, receive, send)
 
     assert.is_true(ret)
   end)

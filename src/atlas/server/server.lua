@@ -2,6 +2,8 @@ local luv = require "luv"
 
 local atlas_config = require "atlas.config"
 local logging = require "atlas.logging"
+local http_headers = require "atlas.server.headers"
+local http_statuses = require "atlas.server.statuses"
 local logger = logging.get_logger("atlas.server")
 
 local Server = {}
@@ -16,7 +18,7 @@ local function _init(_, app)
 end
 setmetatable(Server, {__call = _init})
 
-local function on_connection(client)
+local function on_connection(client, app)
   client:read_start(function(err, data)
     -- TODO: This will be replaced with a real implementation soon,
     -- so don't worry about the coverage of it.
@@ -24,12 +26,56 @@ local function on_connection(client)
     -- TODO: graceful termination
     assert(not err, err)
 
-    if data then
-      client:write([[HTTP/1.1 200 OK
-Content-Length: 12
-Content-Type: text/plain; charset=utf-8
+    local scope = {
+      type = "http",
+      asgi = {version = "3.0", spec_version = "2.3"},
+      http_version = "1.1",
+      method = "GET",
+      scheme = "http",
+      path = "/",
+      raw_path = "/",
+      query_string = "",
+      root_path = "",
+      headers = {},
+      -- TODO: what should these be?
+      client = {"127.0.0.1", 8000},
+      server = {"127.0.0.1", 8000},
+    }
+    -- TODO: According to ASGI, the server needs to handle chunked responses.
+    -- I don't know how to do that right now.
 
-Hello World!]])
+    -- TODO: Pass along any request body data.
+    local receive = function()
+      return {type = "http.request", body = "", more_body = false}
+    end
+
+    local response = {}
+    local send = function(event)
+      if event.type == "http.response.start" then
+        response.status = event.status
+        response.headers = event.headers
+      elseif event.type == "http.response.body" then
+        response.body = event.body
+      end
+    end
+
+    if data then
+      app(scope, receive, send)
+
+      local wire_response = {
+        "HTTP/1.1 ", http_statuses[response.status], "\n",
+        "Content-Length: " .. #response.body .. "\n",
+      }
+
+      for _, header in ipairs(response.headers) do
+        -- TODO: Handle headers that aren't in the headers table.
+        table.insert(wire_response, http_headers[header[1]] .. ": " .. header[2] .. "\n")
+      end
+
+      table.insert(wire_response, "\n")
+      table.insert(wire_response, response.body)
+
+      client:write(wire_response)
     else
       client:close()
     end
@@ -74,7 +120,7 @@ function Server._make_listen_callback(self)
 
     -- Each client connection must be in a coroutine so it can yield back
     -- to the main event loop if it has some blocking activity.
-    coroutine.wrap(function() on_connection(client) end)()
+    coroutine.wrap(function() on_connection(client, self._app) end)()
   end
 end
 
