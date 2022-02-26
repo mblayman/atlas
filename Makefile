@@ -21,7 +21,7 @@ tap:
 build:
 	$(lr) install busted
 	$(lr) install LuaCov
-	$(lr) install --server https://luarocks.org/dev luaformatter
+	which lua-format || $(lr) install --server https://luarocks.org/dev luaformatter
 	$(lr) make
 
 atlas:
