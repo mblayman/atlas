@@ -4,11 +4,21 @@ Application.__index = Application
 
 local function _init(_)
   local self = setmetatable({}, Application)
+  -- TODO: receive a table of routes and pass it to a router.
   return self
 end
 
 -- Act as a LASGI callable interface.
 function Application.__call(_, _, receive, send) -- scope, receive, send
+  -- TODO:
+  -- add a router
+  -- match, route = router.route(scope["method"], scope["path"])
+  -- if match
+  -- build request
+  -- route:run will parse the path
+  -- response = route:run(request)
+  -- else 404
+
   local _ = receive() -- event
   send({
     type = "http.response.start",
