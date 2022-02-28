@@ -1,10 +1,12 @@
+local Router = require "atlas.router"
+
 -- Atlas application
 local Application = {}
 Application.__index = Application
 
-local function _init(_)
+local function _init(_, routes)
   local self = setmetatable({}, Application)
-  -- TODO: receive a table of routes and pass it to a router.
+  self.router = Router(routes)
   return self
 end
 
