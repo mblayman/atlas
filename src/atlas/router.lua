@@ -1,3 +1,6 @@
+local Match = require "atlas.match"
+local NONE = Match.NONE
+
 local Router = {}
 Router.__index = Router
 
@@ -16,8 +19,8 @@ setmetatable(Router, {__call = _init})
 function Router.route(self, method, path)
   for _, route in ipairs(self.routes) do
     local match = route:matches(method, path)
-    if match then return match, route end
+    if match ~= NONE then return match, route end
   end
-  return false, nil
+  return NONE, nil
 end
 return Router

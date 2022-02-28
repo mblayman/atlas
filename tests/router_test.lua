@@ -1,6 +1,7 @@
 local assert = require "luassert.assert"
 
 local Router = require "atlas.router"
+local Match = require "atlas.match"
 
 describe("Router", function()
 
@@ -19,13 +20,24 @@ describe("Router", function()
   end)
 
   it("finds a route matching a path", function()
-    local expected_route = {matches = function() return true end}
+    local expected_route = {matches = function() return Match.FULL end}
     local routes = {expected_route}
     local router = Router(routes)
 
     local match, route = router:route("GET", "/")
 
-    assert.is_true(match)
+    assert.same(Match.FULL, match)
+    assert.equal(expected_route, route)
+  end)
+
+  it("finds a route partially matching a path", function()
+    local expected_route = {matches = function() return Match.PARTIAL end}
+    local routes = {expected_route}
+    local router = Router(routes)
+
+    local match, route = router:route("GET", "/")
+
+    assert.same(Match.PARTIAL, match)
     assert.equal(expected_route, route)
   end)
 
@@ -35,7 +47,7 @@ describe("Router", function()
 
     local match, route = router:route("GET", "/")
 
-    assert.is_false(match)
+    assert.same(Match.NONE, match)
     assert.is_nil(route)
   end)
 end)
