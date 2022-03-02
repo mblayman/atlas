@@ -50,4 +50,5 @@ describe("Router", function()
     assert.same(Match.NONE, match)
     assert.is_nil(route)
   end)
+
 end)

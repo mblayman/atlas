@@ -23,4 +23,5 @@ function Router.route(self, method, path)
   end
   return NONE, nil
 end
+
 return Router
