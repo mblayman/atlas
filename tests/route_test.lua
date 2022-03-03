@@ -2,7 +2,7 @@ local assert = require "luassert.assert"
 
 local Route = require "atlas.route"
 local Match = require "atlas.match"
-local FULL = Match.FULL
+local FULL, PARTIAL = Match.FULL, Match.PARTIAL
 
 describe("Route", function()
 
@@ -31,6 +31,19 @@ describe("Route", function()
 
     assert.same(FULL, match)
   end)
+
+  it("matches partially", function()
+    local controller = function() end
+    local route = Route("/", controller, {"POST"})
+
+    local match = route:matches("GET", "/")
+
+    assert.same(PARTIAL, match)
+  end)
+
+  it("matches with string parameter", function() end)
+  it("matches with int parameter", function() end)
+  it("matches with multiple parameters", function() end)
 
   it("tests #xfail", function()
     local path = "/{username:string}"

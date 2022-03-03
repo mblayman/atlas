@@ -27,9 +27,13 @@ local function _init(_, path, controller, methods)
 end
 setmetatable(Route, {__call = _init})
 
-function Route.matches(_, _, _) -- self, method, path
-  -- TODO: fix this
-  if PARTIAL == PARTIAL then return FULL end
+function Route.matches(self, method, _) -- self, method, path
+  -- TODO: match path against a generated pattern
+
+  for _, allowed_method in ipairs(self.methods) do
+    if method == allowed_method then return FULL end
+  end
+  return PARTIAL
 end
 
 return Route
