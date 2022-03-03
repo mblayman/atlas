@@ -1,5 +1,12 @@
 local Match = require "atlas.match"
-local FULL, PARTIAL = Match.FULL, Match.PARTIAL
+local FULL, NONE, PARTIAL = Match.FULL, Match.NONE, Match.PARTIAL
+
+-- Make a pattern that matches the path template.
+local function make_path_matcher(path)
+  -- TODO: convert the path
+  -- TODO: assert that the converter is valid.
+  return path .. "$"
+end
 
 local Route = {}
 Route.__index = Route
@@ -15,6 +22,7 @@ local function _init(_, path, controller, methods)
   local self = setmetatable({}, Route)
 
   self.path = path
+  self.path_pattern = make_path_matcher(path)
   self.controller = controller
 
   if not methods then
@@ -27,8 +35,17 @@ local function _init(_, path, controller, methods)
 end
 setmetatable(Route, {__call = _init})
 
-function Route.matches(self, method, _) -- self, method, path
-  -- TODO: match path against a generated pattern
+-- Check if the route matches the method and path.
+--
+-- The match has three states:
+-- * NONE - no match
+-- * PARTIAL - the path matches, but the method is not allowed
+-- * FULL - the path matches and the method is allowed
+--
+-- method: An HTTP method, uppercased
+-- path: An HTTP request path
+function Route.matches(self, method, path)
+  if not string.match(path, self.path_pattern) then return NONE end
 
   for _, allowed_method in ipairs(self.methods) do
     if method == allowed_method then return FULL end
