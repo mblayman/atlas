@@ -1,11 +1,43 @@
+local stringx = require "pl.stringx"
+
 local Match = require "atlas.match"
 local FULL, NONE, PARTIAL = Match.FULL, Match.NONE, Match.PARTIAL
 
+-- Converter is not optional!
+local PARAMETER_PATTERN = "{([a-zA-Z_][a-zA-Z0-9_]*)(:[a-zA-Z_][a-zA-Z0-9_]*)}"
+
+local CONVERTER_PATTERNS = {
+  -- string should include any character except a slash.
+  string = "([^/]*)",
+  int = "([%d]*)",
+}
+
 -- Make a pattern that matches the path template.
 local function make_path_matcher(path)
-  -- TODO: convert the path
-  -- TODO: assert that the converter is valid.
-  return path .. "$"
+  assert(stringx.startswith(path, "/"), "A route path must start with a slash `/`.")
+
+  local pattern = ""
+  local index, path_length = 1, string.len(path)
+  local parameter_start, parameter_end
+  while index <= path_length do
+    parameter_start, parameter_end = string.find(path, PARAMETER_PATTERN, index)
+    if parameter_start then
+      -- Include any literal characters before the parameter.
+      pattern = pattern .. string.sub(path, index, parameter_start - 1)
+
+      local _, converter = string.match(path, PARAMETER_PATTERN, parameter_start)
+      local converter_type = string.sub(converter, 2) -- strip off the colon
+      local converter_pattern = CONVERTER_PATTERNS[converter_type]
+
+      pattern = pattern .. converter_pattern
+      index = parameter_end + 1
+    else
+      -- No parameters. Capture any remaining portion.
+      pattern = pattern .. string.sub(path, index)
+      break
+    end
+  end
+  return pattern .. "$"
 end
 
 local Route = {}

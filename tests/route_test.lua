@@ -41,20 +41,29 @@ describe("Route", function()
     assert.same(PARTIAL, match)
   end)
 
-  it("matches with string parameter", function() end)
-  it("matches with int parameter", function() end)
-  it("matches with multiple parameters", function() end)
+  it("matches with string parameter", function()
+    local controller = function() end
+    local route = Route("/users/{username:string}", controller)
 
-  it("tests #xfail", function()
-    local path = "/{username:string}"
-    -- Converter is not optional!
-    local pattern = "{([a-zA-Z_][a-zA-Z0-9_]*)(:[a-zA-Z_][a-zA-Z0-9_]*)}"
+    local match = route:matches("GET", "/users/matt")
 
-    for parameter, converter in string.gmatch(path, pattern) do
-      print(parameter)
-      print(converter)
-    end
-
-    assert.is_nil(true)
+    assert.same(FULL, match)
   end)
+
+  it("matches with int parameter", function()
+    local controller = function() end
+    local route = Route("/users/{id:int}", controller)
+
+    local match = route:matches("GET", "/users/42")
+
+    assert.same(FULL, match)
+  end)
+
+  it("matches with multiple parameters", function() end)
+  it("matches with no parameters", function() end)
+
+  it("generates path pattern with one parameter", function() end)
+  it("generates path pattern with multiple parameters", function() end)
+
+  it("fails with an unknown converter", function() end)
 end)
