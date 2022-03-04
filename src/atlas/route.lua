@@ -16,7 +16,7 @@ local CONVERTER_PATTERNS = {
 local function make_path_matcher(path)
   assert(stringx.startswith(path, "/"), "A route path must start with a slash `/`.")
 
-  local pattern = ""
+  local pattern = "^"
   local index, path_length = 1, string.len(path)
   local parameter_start, parameter_end
   while index <= path_length do
@@ -27,7 +27,11 @@ local function make_path_matcher(path)
 
       local _, converter = string.match(path, PARAMETER_PATTERN, parameter_start)
       local converter_type = string.sub(converter, 2) -- strip off the colon
+
       local converter_pattern = CONVERTER_PATTERNS[converter_type]
+      if not converter_pattern then
+        error("Unknown converter type: " .. converter_type)
+      end
 
       pattern = pattern .. converter_pattern
       index = parameter_end + 1

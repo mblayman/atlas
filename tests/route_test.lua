@@ -59,11 +59,43 @@ describe("Route", function()
     assert.same(FULL, match)
   end)
 
-  it("matches with multiple parameters", function() end)
-  it("matches with no parameters", function() end)
+  it("matches with multiple parameters", function()
+    local controller = function() end
+    local route = Route("/users/{username:string}/posts/{id:int}/likes", controller)
 
-  it("generates path pattern with one parameter", function() end)
-  it("generates path pattern with multiple parameters", function() end)
+    local match = route:matches("GET", "/users/matt/posts/42/likes")
 
-  it("fails with an unknown converter", function() end)
+    assert.same(FULL, match)
+  end)
+
+  it("matches with no parameters", function()
+    local controller = function() end
+    local route = Route("/users", controller)
+
+    local match = route:matches("GET", "/users")
+
+    assert.same(FULL, match)
+  end)
+
+  it("generates path pattern with one parameter", function()
+    local controller = function() end
+    local route = Route("/users/{id:int}", controller)
+
+    assert.same("^/users/([%d]*)$", route.path_pattern)
+  end)
+
+  it("generates path pattern with multiple parameters", function()
+    local controller = function() end
+    local route = Route("/users/{username:string}/posts/{id:int}", controller)
+
+    assert.same("^/users/([^/]*)/posts/([%d]*)$", route.path_pattern)
+  end)
+
+  it("fails with an unknown converter", function()
+    local controller = function() end
+    local status, message = pcall(Route, "/users/{id:nope}", controller)
+
+    assert.is_false(status)
+    assert.is_not_nil(string.find(message, "Unknown converter type: nope", 1, true))
+  end)
 end)
