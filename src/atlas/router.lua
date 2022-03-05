@@ -16,6 +16,10 @@ local function _init(_, routes)
 end
 setmetatable(Router, {__call = _init})
 
+-- Find a route that matches an HTTP method and path.
+--
+-- method: An HTTP method
+-- path: An HTTP request path
 function Router.route(self, method, path)
   for _, route in ipairs(self.routes) do
     local match = route:matches(method, path)

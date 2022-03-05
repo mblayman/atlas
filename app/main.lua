@@ -1,5 +1,7 @@
 local Application = require "atlas.application"
 
-local app = Application()
+local routes = require "app.routes"
+
+local app = Application(routes)
 
 return {app = app}

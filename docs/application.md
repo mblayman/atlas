@@ -19,7 +19,7 @@ local Route = require "atlas.route"
 
 local controllers = require "myapp.controllers"
 
-routes = {
+local routes = {
   Route("/", controllers.home),
   Route("/about", controllers.about),
 }
