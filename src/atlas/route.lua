@@ -11,10 +11,16 @@ local CONVERTER_PATTERNS = {
   string = "([^/]*)",
   int = "([%d]*)",
 }
+local CONVERTER_TRANSFORMS = {int = math.tointeger}
 
 -- Make a pattern that matches the path template.
+--
+-- Along with the pattern, a table of any converters discovered is provided.
 local function make_path_matcher(path)
   assert(stringx.startswith(path, "/"), "A route path must start with a slash `/`.")
+
+  -- Capture which converters are used. There will be one converter for each parameter.
+  local converters = {}
 
   local pattern = "^"
   local index, path_length = 1, string.len(path)
@@ -34,6 +40,7 @@ local function make_path_matcher(path)
       end
 
       pattern = pattern .. converter_pattern
+      table.insert(converters, converter_type)
       index = parameter_end + 1
     else
       -- No parameters. Capture any remaining portion.
@@ -41,7 +48,7 @@ local function make_path_matcher(path)
       break
     end
   end
-  return pattern .. "$"
+  return pattern .. "$", converters
 end
 
 local Route = {}
@@ -58,7 +65,7 @@ local function _init(_, path, controller, methods)
   local self = setmetatable({}, Route)
 
   self.path = path
-  self.path_pattern = make_path_matcher(path)
+  self.path_pattern, self.converters = make_path_matcher(path)
   self.controller = controller
 
   if not methods then
@@ -86,7 +93,30 @@ function Route.matches(self, method, path)
   for _, allowed_method in ipairs(self.methods) do
     if method == allowed_method then return FULL end
   end
+
   return PARTIAL
+end
+
+-- Route a request to a controller.
+--
+-- This method assumes that the path is already a FULL match.
+--
+-- request: An HTTP request object
+function Route.run(self, request)
+  local raw_parameters = table.pack(string.match(request.path, self.path_pattern))
+
+  local transformer
+  local parameters = {}
+  for i, converter_type in ipairs(self.converters) do
+    transformer = CONVERTER_TRANSFORMS[converter_type]
+    if transformer then
+      table.insert(parameters, transformer(raw_parameters[i]))
+    else
+      table.insert(parameters, raw_parameters[i])
+    end
+  end
+
+  return self.controller(request, table.unpack(parameters))
 end
 
 return Route
