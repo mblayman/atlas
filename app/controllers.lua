@@ -1,8 +1,5 @@
-local function home()
-  -- TODO: handle a request.
-  -- TOOD: return a Response
-  local response = {}
-  return response
-end
+local Response = require "atlas.response"
+
+local function home() return Response("Hello World!") end
 
 return {home = home}

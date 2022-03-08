@@ -1,6 +1,7 @@
 local assert = require "luassert.assert"
 
 local Request = require "atlas.request"
+local asgi = require "atlas.test.asgi"
 
 describe("Request", function()
 
@@ -12,4 +13,10 @@ describe("Request", function()
     assert.equal(scope, request.scope)
   end)
 
+  it("proxies the scope path", function()
+    local scope = asgi.make_scope()
+    local request = Request(scope)
+
+    assert.same(scope.path, request.path)
+  end)
 end)

@@ -9,6 +9,10 @@ Request.__index = Request
 local function _init(_, scope)
   local self = setmetatable({}, Request)
   self.scope = scope
+
+  -- Scope proxy attributes
+  self.path = self.scope.path
+
   return self
 end
 setmetatable(Request, {__call = _init})
