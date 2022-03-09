@@ -26,8 +26,7 @@ function Application.__call(self, scope, receive, send)
     local request = Request(scope)
     response = route:run(request)
   elseif match == PARTIAL then
-    -- TODO: return 405
-    print("partial")
+    response = Response("", "text/html", 405)
   end
 
   response(send)

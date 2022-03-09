@@ -1,4 +1,5 @@
 local assert = require "luassert.assert"
+local spy = require "luassert.spy"
 
 local Application = require "atlas.application"
 local Response = require "atlas.response"
@@ -30,13 +31,15 @@ describe("Application", function()
     local routes = {Route("/", function() return Response() end)}
     local app = Application(routes)
     local receive = function() end
-    local called = false
-    local send = function() called = true end
+    local send = spy.new(function() end)
 
     app(asgi.make_scope(), receive, send)
 
-    -- TODO: check for 200
-    assert.is_true(called)
+    assert.spy(send).called_with({
+      type = "http.response.start",
+      status = 200,
+      headers = {{"content-type", "text/html"}},
+    })
   end)
 
   it("handles a partial match", function()
@@ -45,13 +48,15 @@ describe("Application", function()
     local scope = asgi.make_scope()
     scope.method = "POST"
     local receive = function() end
-    local called = false
-    local send = function() called = true end
+    local send = spy.new(function() end)
 
     app(scope, receive, send)
 
-    -- TODO: check for 405
-    assert.is_true(called)
+    assert.spy(send).called_with({
+      type = "http.response.start",
+      status = 405,
+      headers = {{"content-type", "text/html"}},
+    })
   end)
 
   it("handles a none match", function()
@@ -60,12 +65,14 @@ describe("Application", function()
     local scope = asgi.make_scope()
     scope.method = "POST"
     local receive = function() end
-    local called = false
-    local send = function() called = true end
+    local send = spy.new(function() end)
 
     app(scope, receive, send)
 
-    -- TODO: check for 404
-    assert.is_true(called)
+    assert.spy(send).called_with({
+      type = "http.response.start",
+      status = 404,
+      headers = {{"content-type", "text/html"}},
+    })
   end)
 end)
