@@ -159,4 +159,17 @@ describe("main", function()
 
     assert.equal(0, status)
   end)
+
+  it("fails when there is no app", function()
+    local server = {set_up = function() return 0 end, run = function() return false end}
+    local config = {host = "127.0.0.1", port = 5555, app = "app.main:app_not_here"}
+
+    local status, message = pcall(main.run, config, server)
+
+    assert.is_false(status)
+    assert.is_not_nil(string.find(message,
+                                  "No app named 'app_not_here' found in module 'app.main'",
+                                  1, true))
+  end)
+
 end)

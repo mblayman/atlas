@@ -6,8 +6,12 @@ local Server = require "atlas.server.server"
 local function load_app(config)
   local app_module, app_name = utils.splitv(config.app, ":", false, 2)
   local module = require(app_module)
+
   local app = module[app_name]
-  -- TODO: Crash if app is nil.
+  if not app then
+    error(string.format("No app named '%s' found in module '%s'", app_name, app_module))
+  end
+
   return app
 end
 
