@@ -2,7 +2,6 @@ local luv = require "luv"
 
 local atlas_config = require "atlas.config"
 local logging = require "atlas.logging"
-local http_headers = require "atlas.server.headers"
 local http_statuses = require "atlas.server.statuses"
 local logger = logging.get_logger("atlas.server")
 
@@ -64,12 +63,11 @@ local function on_connection(client, app)
 
       local wire_response = {
         "HTTP/1.1 ", http_statuses[response.status], "\n",
-        "Content-Length: " .. #response.body .. "\n",
+        "content-length: " .. #response.body .. "\n",
       }
 
       for _, header in ipairs(response.headers) do
-        -- TODO: Handle headers that aren't in the headers table.
-        table.insert(wire_response, http_headers[header[1]] .. ": " .. header[2] .. "\n")
+        table.insert(wire_response, header[1] .. ": " .. header[2] .. "\n")
       end
 
       table.insert(wire_response, "\n")
