@@ -51,10 +51,10 @@ Atlas supports:
 | LiteralString | Displays the literal string. |
 | '...' | Varargs is not supported. |
 | functiondef | Function definition is not supported. |
-| prefixexp | TODO: function calls are in here so that needs to be supported. |
-| tableconstructor | TODO: support this because args can contain an expression. |
-| exp binop exp | TODO: support this. |
-| unop exp | TODO: support this. |
+| prefixexp | |
+| tableconstructor | |
+| exp binop exp | |
+| unop exp | |
 
 Extra Desired Features
 ----------------------
