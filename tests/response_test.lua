@@ -46,7 +46,7 @@ describe("Response", function()
   it("sends response data", function()
     local content = "hello world"
     local response = Response(content)
-    response.headers = {["content-type"] = "application/json"}
+    response.headers = {["x-foo"] = "bar"}
     local send = spy.new(function() end)
 
     response(send)
@@ -54,7 +54,7 @@ describe("Response", function()
     assert.spy(send).called_with({
       type = "http.response.start",
       status = 200,
-      headers = {{"content-type", "application/json"}},
+      headers = {{"x-foo", "bar"}, {"content-type", "text/html"}},
     })
     assert.spy(send).called_with({type = "http.response.body", body = "hello world"})
   end)

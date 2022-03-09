@@ -49,7 +49,7 @@ function Response.__call(self, send)
     table.insert(asgi_headers, {string.lower(header), value})
   end
 
-  -- TODO: set the content type header.
+  table.insert(asgi_headers, {"content-type", self.content_type})
 
   send({
     type = "http.response.start",
