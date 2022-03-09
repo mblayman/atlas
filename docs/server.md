@@ -48,7 +48,6 @@ What's next?
 * Read `libuv` docs.
   http://docs.libuv.org/en/v1.x/
 * Study Uvicorn.
- * What if Lua had an ASGI-like interface?
  * What would ASGI look like in Lua that would be different than Python?
    https://asgi.readthedocs.io/en/latest/specs/www.html
 * Maybe use lua-http for HTTP parsing?
@@ -57,10 +56,6 @@ What's next?
 
 ASGI Notes:
 
-* Starlette Response calls ASGI `send` function with:
-  * `await send({type: http.response.start, ...})` then
-  * `await send({type: http.response.body, ...})` then
-  * https://github.com/encode/starlette/blob/2d6ddd386199e9e6cf0df0849e1de7d1a8c86b9d/starlette/responses.py#L152
 * Starlette is less clear about the `receive` side.
   There are a handful of spots that call `receive`,
   and I'm not sure which is the "standard" one.
