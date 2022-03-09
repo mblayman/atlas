@@ -10,7 +10,6 @@ local function make_scope()
     query_string = "",
     root_path = "",
     headers = {},
-    -- TODO: what should these be?
     client = {"127.0.0.1", 8000},
     server = {"127.0.0.1", 8000},
   }

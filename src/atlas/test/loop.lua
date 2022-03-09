@@ -15,7 +15,6 @@ end
 -- Run the event loop until all callbacks are done.
 function loop.run_until_done(func)
   coroutine.wrap(func)()
-  -- TODO: This should probably have a limit since it's not actually running once.
   local not_done = true
   while not_done do not_done = luv.run("once") end
 end
