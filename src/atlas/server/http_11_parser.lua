@@ -1,0 +1,31 @@
+-- HTTP 1.1 parser
+--
+--  HTTP-message   = start-line
+--                   *( header-field CRLF )
+--                   CRLF
+--                   [ message-body ]
+--
+--  start-line     = request-line / status-line
+--
+--  request-line   = method SP request-target SP HTTP-version CRLF
+--
+--  method:
+--
+--  > All general-purpose servers MUST support the methods GET and HEAD. All other methods are OPTIONAL.
+--
+--  GET
+--  HEAD
+--  POST
+--  PUT
+--  DELETE
+--  CONNECT - low priority, respond with 501 Not Implemented
+--  OPTIONS - low priority, respond with 501 Not Implemented
+--  TRACE   - low priority, respond with 501 Not Implemented
+--
+--  Recipients of an invalid request-line SHOULD respond with either a 400 (Bad Request) error
+--
+--  request-target too long, response with 414 URI Too Long
+--
+--  > Various ad hoc limitations on request-line length are found in practice.
+--  > It is RECOMMENDED that all HTTP senders and recipients support, at a minimum,
+--  > request-line lengths of 8000 octets.
