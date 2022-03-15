@@ -9,7 +9,6 @@ local fs = {}
 local function make_write_callback()
   local thread = coroutine.running()
   return function(err, _)
-    -- TODO: better error handling?
     assert(not err, err)
     coroutine.resume(thread)
   end

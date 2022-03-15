@@ -25,7 +25,6 @@ local function _init(_, user_config)
   end
 
   if self.log_file ~= "" then
-    -- TODO: Handle errors.
     self.log_file_fd = luv.fs_open(self.log_file, "w", 0666)
   else
     self.log_file_fd = 1 -- stdout

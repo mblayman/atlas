@@ -24,10 +24,7 @@ setmetatable(Template, {__call = _init})
 -- Render the template with the provided context table.
 --
 -- This method assumes that the template is parsed.
-function Template.render(self, context)
-  -- TODO: Render with self._context and context merged
-  return self._renderer(context)
-end
+function Template.render(self, context) return self._renderer(context) end
 
 -- Parse the source template to produce a renderer function.
 function Template.parse(self)

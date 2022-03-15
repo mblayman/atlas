@@ -124,32 +124,31 @@ hello
   end)
 
   it("renders dotted access expression variable", function()
-    -- TODO - {{ foo.bar }}
+    -- {{ foo.bar }}
   end)
 
   it("renders subscript expression variable", function()
-    -- TODO - {{ foo['bar'] }}
+    -- {{ foo['bar'] }}
   end)
 
   it("renders a function expression", function()
-    -- TODO - {{ foo('42') }}
+    -- {{ foo('42') }}
   end)
 
   it("renders a expression variable method", function()
-    -- TODO - {{ foo.bar(baz) }}
+    -- {{ foo.bar(baz) }}
   end)
 
   it("renders with undefined variables", function()
-    -- TODO: render as an empty string.
+    -- render as an empty string.
   end)
 
   it("errors when undefined is used in an expression", function()
-    -- TODO: when undefined is used with something like addition, return an error.
+    -- when undefined is used with something like addition, return an error.
   end)
 
   it("renders with different data", function()
     -- Different data will render with different results.
-    -- TODO
   end)
 
 end)

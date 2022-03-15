@@ -22,26 +22,7 @@ local function on_connection(client, app)
     -- TODO: This will be replaced with a real implementation soon,
     -- so don't worry about the coverage of it.
     -- luacov: disable
-    -- TODO: graceful termination
     assert(not err, err)
-
-    local scope = {
-      type = "http",
-      asgi = {version = "3.0", spec_version = "2.3"},
-      http_version = "1.1",
-      method = "GET",
-      scheme = "http",
-      path = "/",
-      raw_path = "/",
-      query_string = "",
-      root_path = "",
-      headers = {},
-      -- TODO: what should these be?
-      client = {"127.0.0.1", 8000},
-      server = {"127.0.0.1", 8000},
-    }
-    -- TODO: According to ASGI, the server needs to handle chunked responses.
-    -- I don't know how to do that right now.
 
     -- TODO: Pass along any request body data.
     local receive = function()
@@ -59,6 +40,21 @@ local function on_connection(client, app)
     end
 
     if data then
+      local scope = {
+        type = "http",
+        asgi = {version = "3.0", spec_version = "2.3"},
+        http_version = "1.1",
+        method = "GET",
+        scheme = "http",
+        path = "/",
+        raw_path = "/",
+        query_string = "",
+        root_path = "",
+        headers = {},
+        client = {"127.0.0.1", 8000},
+        server = {"127.0.0.1", 8000},
+      }
+
       app(scope, receive, send)
 
       local wire_response = {
