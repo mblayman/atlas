@@ -35,7 +35,7 @@ local function execute(config, parser, user_config_module_path)
   -- The require command true mode is harsh and doesn't tell what subcommands exist.
   -- Check if there is no command and show the help if appropriate.
   if config.command == nil then
-    logger.log(parser:get_help(), true)
+    logger.log(parser:get_help() .. "\n", true)
 
   else
     -- TODO: The need for a user config should vary by command,

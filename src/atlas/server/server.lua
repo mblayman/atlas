@@ -49,7 +49,7 @@ local function on_connection(client, app)
         path = "/",
         raw_path = "/",
         query_string = "",
-        root_path = "",
+        root_path = "", -- Not supporting applications mounted at some subpath
         headers = {},
         client = {"127.0.0.1", 8000},
         server = {"127.0.0.1", 8000},
