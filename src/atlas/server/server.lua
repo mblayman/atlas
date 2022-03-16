@@ -26,7 +26,14 @@ local function on_connection(client, app)
 
     -- TODO: Pass along any request body data.
     local receive = function()
-      return {type = "http.request", body = "", more_body = false}
+      return {
+        type = "http.request",
+        body = "",
+        -- Don't bother with more_body.
+        -- Make the server join the body together rather than pushing
+        -- that responsibility to the app.
+        more_body = false,
+      }
     end
 
     local response = {}
