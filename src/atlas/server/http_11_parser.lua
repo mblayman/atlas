@@ -14,10 +14,16 @@
 --  > Various ad hoc limitations on request-line length are found in practice.
 --  > It is RECOMMENDED that all HTTP senders and recipients support, at a minimum,
 --  > request-line lengths of 8000 octets.
+local ParserErrors = require "atlas.server.parser_errors"
+
 local Parser = {}
 Parser.__index = Parser
 
 local REQUEST_LINE_PATTERN = "^(%u+) ([^ ]+)"
+
+local SUPPORTED_METHODS = {"GET", "POST", "HEAD", "DELETE", "PUT", "PATCH"}
+-- Currrently unsupported: CONNECT, OPTIONS, TRACE
+-- PATCH is defined in RFC 5789
 
 -- An HTTP 1.1 parser
 --
@@ -39,10 +45,18 @@ setmetatable(Parser, {__call = _init})
 function Parser.parse(data)
   local meta = {type = "http"}
   local method, target, _ = string.match(data, REQUEST_LINE_PATTERN) -- version
-  -- TODO: check if method is nil for no match
-  -- TODO: check if method is supported
+  if not method then return nil, nil, ParserErrors.INVALID_REQUEST_LINE end
 
   meta.method = method
+  local method_is_supported = false
+  for _, supported_method in ipairs(SUPPORTED_METHODS) do
+    if method == supported_method then
+      method_is_supported = true
+      break
+    end
+  end
+  if not method_is_supported then return meta, nil, ParserErrors.METHOD_NOT_IMPLEMENTED end
+
   meta.raw_path = target -- This is only kinda right. Querystring could be in here.
   return meta, nil, nil
 end
