@@ -42,7 +42,7 @@ setmetatable(Parser, {__call = _init})
 -- meta: The non-body portion of the request (a strict subset of an ASGI scope)
 -- body: The body data
 -- err: Non-nil if an error exists
-function Parser.parse(data)
+function Parser.parse(_, data) -- self, data
   local meta = {type = "http"}
   local method, target, _ = string.match(data, REQUEST_LINE_PATTERN) -- version
   if not method then return nil, nil, ParserErrors.INVALID_REQUEST_LINE end
@@ -57,7 +57,8 @@ function Parser.parse(data)
   end
   if not method_is_supported then return meta, nil, ParserErrors.METHOD_NOT_IMPLEMENTED end
 
-  meta.raw_path = target -- This is only kinda right. Querystring could be in here.
+  meta.path = target
+  meta.raw_path = target
   return meta, nil, nil
 end
 

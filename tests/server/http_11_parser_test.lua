@@ -15,7 +15,7 @@ describe("Parser", function()
     local data = "GET / HTTP/1.1\r\n\r\n"
     local parser = Parser()
 
-    local meta = parser.parse(data)
+    local meta = parser:parse(data)
 
     assert.same("GET", meta.method)
   end)
@@ -24,7 +24,7 @@ describe("Parser", function()
     local data = "GET / HTTP/1.1\r\n\r\n"
     local parser = Parser()
 
-    local meta = parser.parse(data)
+    local meta = parser:parse(data)
 
     assert.same("/", meta.raw_path)
   end)
@@ -33,7 +33,7 @@ describe("Parser", function()
     local data = "INVALID\r\n\r\n"
     local parser = Parser()
 
-    local _, _, err = parser.parse(data)
+    local _, _, err = parser:parse(data)
 
     assert.same(ParserErrors.INVALID_REQUEST_LINE, err)
   end)
@@ -42,10 +42,28 @@ describe("Parser", function()
     local data = "INVALID / HTTP/1.1\r\n\r\n"
     local parser = Parser()
 
-    local meta, _, err = parser.parse(data)
+    local meta, _, err = parser:parse(data)
 
     assert.same("INVALID", meta.method)
     assert.same(ParserErrors.METHOD_NOT_IMPLEMENTED, err)
+  end)
+
+  it("parses the path", function()
+    local data = "GET /some/path HTTP/1.1\r\n\r\n"
+    local parser = Parser()
+
+    local meta = parser:parse(data)
+
+    assert.same("/some/path", meta.path)
+  end)
+
+  it("parses the raw path", function()
+    local data = "GET /some/path HTTP/1.1\r\n\r\n"
+    local parser = Parser()
+
+    local meta = parser:parse(data)
+
+    assert.same("/some/path", meta.raw_path)
   end)
 
 end)

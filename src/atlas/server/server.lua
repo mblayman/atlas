@@ -2,6 +2,7 @@ local luv = require "luv"
 
 local atlas_config = require "atlas.config"
 local logging = require "atlas.logging"
+local Parser = require "atlas.server.http_11_parser"
 local http_statuses = require "atlas.server.statuses"
 local logger = logging.get_logger("atlas.server")
 
@@ -16,6 +17,8 @@ local function _init(_, app)
   return self
 end
 setmetatable(Server, {__call = _init})
+
+local ASGI_VERSION = {version = "3.0", spec_version = "2.3"}
 
 local function on_connection(client, app)
   client:read_start(function(err, data)
@@ -47,20 +50,17 @@ local function on_connection(client, app)
     end
 
     if data then
-      local scope = {
-        type = "http",
-        asgi = {version = "3.0", spec_version = "2.3"},
-        http_version = "1.1",
-        method = "GET",
-        scheme = "http",
-        path = "/",
-        raw_path = "/",
-        query_string = "",
-        root_path = "", -- Not supporting applications mounted at some subpath
-        headers = {},
-        client = {"127.0.0.1", 8000},
-        server = {"127.0.0.1", 8000},
-      }
+      local parser = Parser()
+      local scope, _, _ = parser:parse(data) -- meta, body, err
+      scope.asgi = ASGI_VERSION
+      scope.http_version = "1.1"
+      -- Constant until the server supports TLS.
+      scope.scheme = "http"
+      scope.query_string = ""
+      scope.root_path = "" -- Not supporting applications mounted at some subpath
+      scope.headers = {}
+      scope.client = {"127.0.0.1", 8000}
+      scope.server = {"127.0.0.1", 8000}
 
       app(scope, receive, send)
 

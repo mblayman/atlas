@@ -20,13 +20,13 @@ function Application.__call(self, scope, receive, send)
   -- What happens on a request with no body?
   local _ = receive() -- event
 
-  local response = Response("", "text/html", 404)
+  local response = Response("Not Found", "text/html", 404)
   local match, route = self.router:route(scope.method, scope.path)
   if match == FULL then
     local request = Request(scope)
     response = route:run(request)
   elseif match == PARTIAL then
-    response = Response("", "text/html", 405)
+    response = Response("Method Not Allowed", "text/html", 405)
   end
 
   response(send)
