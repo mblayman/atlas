@@ -4,4 +4,7 @@ return {
 
   -- HTTP method is not implemented.
   METHOD_NOT_IMPLEMENTED = 2,
+
+  -- HTTP version is not supported.
+  VERSION_NOT_SUPPORTED = 3,
 }

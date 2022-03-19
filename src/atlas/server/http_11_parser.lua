@@ -21,11 +21,14 @@ local Parser = {}
 Parser.__index = Parser
 
 --  request-line = method SP request-target SP HTTP-version CRLF
-local REQUEST_LINE_PATTERN = "^(%u+) ([^ ]+)"
+local REQUEST_LINE_PATTERN = "^(%u+) ([^ ]+) HTTP/([%d.]+)\r\n"
 
-local SUPPORTED_METHODS = {"GET", "POST", "HEAD", "DELETE", "PUT", "PATCH"}
 -- Currrently unsupported: CONNECT, OPTIONS, TRACE
 -- PATCH is defined in RFC 5789
+local SUPPORTED_METHODS = {"GET", "POST", "HEAD", "DELETE", "PUT", "PATCH"}
+
+-- These are the versions supported by ASGI HTTP 2.3.
+local SUPPORTED_VERSIONS = {"1.0", "1.1", "2"}
 
 -- An HTTP 1.1 parser
 --
@@ -46,7 +49,7 @@ setmetatable(Parser, {__call = _init})
 -- err: Non-nil if an error exists
 function Parser.parse(_, data) -- self, data
   local meta = {type = "http"}
-  local method, target, _ = string.match(data, REQUEST_LINE_PATTERN) -- version
+  local method, target, version = string.match(data, REQUEST_LINE_PATTERN)
   if not method then return nil, nil, ParserErrors.INVALID_REQUEST_LINE end
 
   meta.method = method
@@ -61,6 +64,17 @@ function Parser.parse(_, data) -- self, data
 
   meta.path = target
   meta.raw_path = target
+
+  meta.http_version = version
+  local version_is_supported = false
+  for _, supported_version in ipairs(SUPPORTED_VERSIONS) do
+    if version == supported_version then
+      version_is_supported = true
+      break
+    end
+  end
+  if not version_is_supported then return meta, nil, ParserErrors.VERSION_NOT_SUPPORTED end
+
   return meta, nil, nil
 end
 

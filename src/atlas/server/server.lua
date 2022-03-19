@@ -59,6 +59,8 @@ local function on_connection(client, app)
           client:write("HTTP/1.1 400 Bad Request\r\n\r\n")
         elseif parser_err == ParserErrors.METHOD_NOT_IMPLEMENTED then
           client:write("HTTP/1.1 501 Not Implemented\r\n\r\n")
+        elseif parser_err == ParserErrors.VERSION_NOT_SUPPORTED then
+          client:write("HTTP/1.1 505 HTTP Version Not Supported\r\n\r\n")
         end
         return
       end

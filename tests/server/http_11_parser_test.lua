@@ -66,4 +66,22 @@ describe("Parser", function()
     assert.same("/some/path", meta.raw_path)
   end)
 
+  it("parses the version", function()
+    local data = "GET / HTTP/1.1\r\n\r\n"
+    local parser = Parser()
+
+    local meta = parser:parse(data)
+
+    assert.same("1.1", meta.http_version)
+  end)
+
+  it("errors with an unsupported version", function()
+    local data = "GET / HTTP/99\r\n\r\n"
+    local parser = Parser()
+
+    local meta, _, err = parser:parse(data)
+
+    assert.same("99", meta.http_version)
+    assert.same(ParserErrors.VERSION_NOT_SUPPORTED, err)
+  end)
 end)
