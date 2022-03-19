@@ -3,10 +3,12 @@ local luv = require "luv"
 local config = require "atlas.config"
 local fs = require "atlas.fs"
 
+local logging = {}
+
 -- Get a logger object configured to log to a particular logging namespace.
 --
 -- logger: A name for the logger (e.g., "my.module")
-local function get_logger(logger)
+function logging.get_logger(logger)
 
   -- Log a message to the log file.
   --
@@ -33,4 +35,4 @@ local function get_logger(logger)
   return {log = log}
 end
 
-return {get_logger = get_logger}
+return logging
