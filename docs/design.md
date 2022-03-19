@@ -8,17 +8,17 @@ before Atlas would be usable.
 
 * Server
   * [x] Main entry and argument parsing
-  * [ ] Event loop and incoming connection handling - libuv
-  * [ ] HTTP parser
-  * [ ] Translate to ASGI and coroutines
+  * [x] Event loop and incoming connection handling - libuv
+  * [x] HTTP parser
+  * [x] Translate to ASGI and coroutines
 * Framework
   * Required
-    * [ ] URL routing
-    * [ ] Controller and core classes like request/response
-    * [ ] Template engine
+    * [x] URL routing
+    * [x] Controller and core classes like request/response
+    * [x] Template engine
     * [ ] ORM
   * Nice to have
-    * [ ] Logging
+    * [x] Logging
     * [ ] Static files
     * [ ] Sessions
     * [ ] Auth

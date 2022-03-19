@@ -45,17 +45,4 @@ Having done little async work, I'm in for a lot of learning.
 
 What's next?
 
-* Read `libuv` docs.
-  http://docs.libuv.org/en/v1.x/
-* Study Uvicorn.
- * What would ASGI look like in Lua that would be different than Python?
-   https://asgi.readthedocs.io/en/latest/specs/www.html
-* Maybe use lua-http for HTTP parsing?
-  https://daurnimator.github.io/lua-http/0.4/
 * https://github.com/ms-jpq/lua-async-await/blob/neo/lua/async.lua
-
-ASGI Notes:
-
-* Starlette is less clear about the `receive` side.
-  There are a handful of spots that call `receive`,
-  and I'm not sure which is the "standard" one.

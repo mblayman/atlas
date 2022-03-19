@@ -24,5 +24,10 @@ Atlas will not start without a user-supplied configuration module.
 
 ### Logging
 
-`log_file` - A file handle opened in write mode that records log entries
-(default: `io.stdout`)
+`log_file` - A path to a log file, the default logs to stdout
+(default: `""`)
+
+### Server
+
+`backlog_connections` - The maximum number of backend connections
+(default: `128`)
