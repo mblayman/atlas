@@ -48,7 +48,7 @@ setmetatable(Parser, {__call = _init})
 -- Returns:
 -- meta: The non-body portion of the request (a strict subset of an ASGI scope)
 -- body: The body data
--- err: Non-nil if an error exists
+--  err: Non-nil if an error exists
 function Parser.parse(_, data) -- self, data
   local meta = {type = "http"}
   local method, target, version = string.match(data, REQUEST_LINE_PATTERN)

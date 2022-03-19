@@ -9,7 +9,7 @@ local utils = {}
 -- Check if a value is in the table.
 --
 -- value: The value to scan for
--- t: The table to check against (assumes a list-like structure)
+--     t: The table to check against (assumes a list-like structure)
 function utils.in_table(value, t)
   for _, t_value in ipairs(t) do if value == t_value then return true end end
   return false

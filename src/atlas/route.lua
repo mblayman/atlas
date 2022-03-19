@@ -16,6 +16,8 @@ local CONVERTER_TRANSFORMS = {int = math.tointeger}
 -- Make a pattern that matches the path template.
 --
 -- Along with the pattern, a table of any converters discovered is provided.
+--
+-- path: A path template
 local function make_path_matcher(path)
   assert(stringx.startswith(path, "/"), "A route path must start with a slash `/`.")
 
@@ -58,9 +60,9 @@ Route.__index = Route
 --
 -- A route is used to connect an incoming request to the responsible controller.
 --
--- path: A path template
+--       path: A path template
 -- controller: A controller function
--- methods: A table of methods that the controller can handle (default: {"GET"})
+--    methods: A table of methods that the controller can handle (default: {"GET"})
 local function _init(_, path, controller, methods)
   local self = setmetatable({}, Route)
 
@@ -86,7 +88,7 @@ setmetatable(Route, {__call = _init})
 -- * FULL - the path matches and the method is allowed
 --
 -- method: An HTTP method, uppercased
--- path: An HTTP request path
+--   path: An HTTP request path
 function Route.matches(self, method, path)
   if not string.match(path, self.path_pattern) then return NONE end
 

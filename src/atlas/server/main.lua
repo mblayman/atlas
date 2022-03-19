@@ -18,7 +18,7 @@ end
 -- Run the `serve` command.
 --
 -- server: A dependency injected server for testing modes
--- app: A dependency injected app for testing modes
+--    app: A dependency injected app for testing modes
 local function run(config, server, app)
   if app == nil then app = load_app(config) end
   if server == nil then server = Server(app) end

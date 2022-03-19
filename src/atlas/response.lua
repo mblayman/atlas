@@ -5,10 +5,10 @@ Response.__index = Response
 --
 -- The response object is the primary output interface for controllers.
 --
--- content: The content to return over the wire (default: "")
+--      content: The content to return over the wire (default: "")
 -- content_type: The type of content data (default: "text/html")
--- status_code: The status code (default: 200)
--- headers: HTTP headers (default: {})
+--  status_code: The status code (default: 200)
+--      headers: HTTP headers (default: {})
 local function _init(_, content, content_type, status_code, headers)
   local self = setmetatable({}, Response)
 

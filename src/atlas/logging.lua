@@ -16,7 +16,7 @@ function logging.get_logger(logger)
   -- if the event loop is not running or operate asynchronously when it is.
   --
   -- message: The message to add to the log
-  -- raw: The message should be logged without extra metadata (bool, default: false)
+  --     raw: The message should be logged without extra metadata (bool, default: false)
   local function log(message, raw)
     local log_line
     if raw then
