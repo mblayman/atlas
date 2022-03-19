@@ -16,6 +16,8 @@
 --  > It is RECOMMENDED that all HTTP senders and recipients support, at a minimum,
 --  > request-line lengths of 8000 octets.
 local ParserErrors = require "atlas.server.parser_errors"
+local utils = require "atlas.utils"
+local in_table = utils.in_table
 
 local Parser = {}
 Parser.__index = Parser
@@ -53,27 +55,17 @@ function Parser.parse(_, data) -- self, data
   if not method then return nil, nil, ParserErrors.INVALID_REQUEST_LINE end
 
   meta.method = method
-  local method_is_supported = false
-  for _, supported_method in ipairs(SUPPORTED_METHODS) do
-    if method == supported_method then
-      method_is_supported = true
-      break
-    end
+  if not in_table(method, SUPPORTED_METHODS) then
+    return meta, nil, ParserErrors.METHOD_NOT_IMPLEMENTED
   end
-  if not method_is_supported then return meta, nil, ParserErrors.METHOD_NOT_IMPLEMENTED end
 
   meta.path = target
   meta.raw_path = target
 
   meta.http_version = version
-  local version_is_supported = false
-  for _, supported_version in ipairs(SUPPORTED_VERSIONS) do
-    if version == supported_version then
-      version_is_supported = true
-      break
-    end
+  if not in_table(version, SUPPORTED_VERSIONS) then
+    return meta, nil, ParserErrors.VERSION_NOT_SUPPORTED
   end
-  if not version_is_supported then return meta, nil, ParserErrors.VERSION_NOT_SUPPORTED end
 
   return meta, nil, nil
 end
