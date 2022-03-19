@@ -57,8 +57,10 @@ local function on_connection(client, app)
       if parser_err then
         if parser_err == ParserErrors.INVALID_REQUEST_LINE then
           client:write("HTTP/1.1 400 Bad Request\r\n\r\n")
-          return
+        elseif parser_err == ParserErrors.METHOD_NOT_IMPLEMENTED then
+          client:write("HTTP/1.1 501 Not Implemented\r\n\r\n")
         end
+        return
       end
 
       scope.asgi = ASGI_VERSION
