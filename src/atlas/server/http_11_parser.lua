@@ -5,9 +5,10 @@
 --
 --  start-line     = request-line / status-line
 --
---  request-line   = method SP request-target SP HTTP-version CRLF
---
---  Recipients of an invalid request-line SHOULD respond with either a 400 (Bad Request) error
+--  request-target = origin-form
+--                 / absolute-form
+--                 / authority-form
+--                 / asterisk-form
 --
 --  request-target too long, response with 414 URI Too Long
 --
@@ -19,6 +20,7 @@ local ParserErrors = require "atlas.server.parser_errors"
 local Parser = {}
 Parser.__index = Parser
 
+--  request-line = method SP request-target SP HTTP-version CRLF
 local REQUEST_LINE_PATTERN = "^(%u+) ([^ ]+)"
 
 local SUPPORTED_METHODS = {"GET", "POST", "HEAD", "DELETE", "PUT", "PATCH"}

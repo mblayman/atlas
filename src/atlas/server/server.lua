@@ -3,6 +3,7 @@ local luv = require "luv"
 local atlas_config = require "atlas.config"
 local logging = require "atlas.logging"
 local Parser = require "atlas.server.http_11_parser"
+local ParserErrors = require "atlas.server.parser_errors"
 local http_statuses = require "atlas.server.statuses"
 local logger = logging.get_logger("atlas.server")
 
@@ -51,7 +52,15 @@ local function on_connection(client, app)
 
     if data then
       local parser = Parser()
-      local scope, _, _ = parser:parse(data) -- meta, body, err
+      local scope, _, parser_err = parser:parse(data) -- meta, body, parser_err
+
+      if parser_err then
+        if parser_err == ParserErrors.INVALID_REQUEST_LINE then
+          client:write("HTTP/1.1 400 Bad Request\r\n\r\n")
+          return
+        end
+      end
+
       scope.asgi = ASGI_VERSION
       scope.http_version = "1.1"
       -- Constant until the server supports TLS.
@@ -65,15 +74,15 @@ local function on_connection(client, app)
       app(scope, receive, send)
 
       local wire_response = {
-        "HTTP/1.1 ", http_statuses[response.status], "\n",
-        "content-length: " .. #response.body .. "\n",
+        "HTTP/1.1 ", http_statuses[response.status], "\r\n",
+        "content-length: " .. #response.body .. "\r\n",
       }
 
       for _, header in ipairs(response.headers) do
-        table.insert(wire_response, header[1] .. ": " .. header[2] .. "\n")
+        table.insert(wire_response, header[1] .. ": " .. header[2] .. "\r\n")
       end
 
-      table.insert(wire_response, "\n")
+      table.insert(wire_response, "\r\n")
       table.insert(wire_response, response.body)
 
       client:write(wire_response)
