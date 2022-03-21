@@ -3,6 +3,7 @@ local path = require "pl.path"
 local tablex = require "pl.tablex"
 
 local FileLoader = require "atlas.templates.file_loader"
+local assertions = require "atlas.test.assertions"
 
 local test_path = path.package_path("tests.templates.file_loader_test")
 local templates_test_path = path.dirname(path.abspath(test_path))
@@ -63,9 +64,7 @@ describe("FileLoader", function()
     local status, message = pcall(file_loader.load, file_loader, context)
 
     assert.is_false(status)
-    assert.is_not_nil(string.find(message,
-                                  "Template directory does not exist: not/a/directory",
-                                  1, true))
+    assertions.contains("Template directory does not exist: not/a/directory", message)
   end)
 
 end)

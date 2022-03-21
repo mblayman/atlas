@@ -17,6 +17,9 @@ local function _init(_, template_dirs)
 end
 setmetatable(FileLoader, {__call = _init})
 
+-- Load all the templates found in the template directories.
+--
+-- context: A global context that a template will use as the base context layer
 function FileLoader.load(self, context)
   local templates = {}
 
@@ -25,6 +28,7 @@ function FileLoader.load(self, context)
       error(string.format("Template directory does not exist: %s", template_dir))
     end
 
+    template_dir = path.abspath(template_dir)
     for root, _, files in dir.walk(template_dir) do
       for file_ in files:iter() do
         local template_path = path.join(root, file_)

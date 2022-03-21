@@ -3,6 +3,7 @@ local stub = require "luassert.stub"
 
 local main = require "atlas.server.main"
 local Server = require "atlas.server.server"
+local assertions = require "atlas.test.assertions"
 local loop = require "atlas.test.loop"
 
 local function build_mock_server()
@@ -167,9 +168,8 @@ describe("main", function()
     local status, message = pcall(main.run, config, server)
 
     assert.is_false(status)
-    assert.is_not_nil(string.find(message,
-                                  "No app named 'app_not_here' found in module 'app.main'",
-                                  1, true))
+    assertions.contains("No app named 'app_not_here' found in module 'app.main'",
+                        message)
   end)
 
 end)

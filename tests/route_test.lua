@@ -2,6 +2,7 @@ local assert = require "luassert.assert"
 
 local Route = require "atlas.route"
 local Match = require "atlas.match"
+local assertions = require "atlas.test.assertions"
 local FULL, PARTIAL = Match.FULL, Match.PARTIAL
 
 describe("Route", function()
@@ -99,7 +100,7 @@ describe("Route", function()
     local status, message = pcall(Route, "/users/{id:nope}", controller)
 
     assert.is_false(status)
-    assert.is_not_nil(string.find(message, "Unknown converter type: nope", 1, true))
+    assertions.contains("Unknown converter type: nope", message)
   end)
 
   it("send parameters to the controller", function()

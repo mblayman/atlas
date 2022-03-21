@@ -1,2 +1,2 @@
 -- An app config for development of the framework
-return {}
+return {template_dirs = {"app/templates"}}
