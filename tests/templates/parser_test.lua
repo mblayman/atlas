@@ -134,4 +134,21 @@ world" }} after]]
     assert.same(expected, ast)
   end)
 
+  describe("unary operator expression", function()
+    it("parses the unary minus", function()
+      local parser = Parser()
+      local source = "A negative number of {{ -42 }}"
+
+      local ast = parser:parse(source)
+
+      local expected = {
+        {node_type = "text", text = "A negative number of "}, {
+          node_type = "unary_operator",
+          unary_operator = "-",
+          operand = {node_type = "numeral", numeral = "42"},
+        },
+      }
+      assert.same(expected, ast)
+    end)
+  end)
 end)

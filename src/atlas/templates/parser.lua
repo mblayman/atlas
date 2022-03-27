@@ -1,7 +1,12 @@
 local lpeg = require "lpeg"
 
-local CaptureToTable, Capture, Pattern, Range, Set, Variable = lpeg.Ct, lpeg.C, lpeg.P,
-                                                               lpeg.R, lpeg.S, lpeg.V
+-- Unpack lpeg variables with names that I have a fighting chance of remembering.
+local CaptureToTable = lpeg.Ct
+local Capture = lpeg.C
+local Pattern = lpeg.P
+local Range = lpeg.R
+local Set = lpeg.S
+local Variable = lpeg.V
 
 local Parser = {}
 Parser.__index = Parser
@@ -40,10 +45,17 @@ local function make_text_node(matched_text)
   return {node_type = "text", text = matched_text}
 end
 
--- Build an expression node.
--- local function make_expression_node(matched_expression)
---   return {node_type = 'expression', expression = matched_expression}
--- end
+-- Build a unary operator expression node.
+--
+-- matched_unary_operator: A literal captured unary operator
+--                operand: An operand expression
+local function make_unary_operator_node(matched_unary_operator, operand)
+  return {
+    node_type = "unary_operator",
+    unary_operator = matched_unary_operator,
+    operand = operand,
+  }
+end
 
 -- Pattern building blocks
 
@@ -72,6 +84,8 @@ local Template = Variable("Template")
 local TemplateExpression = Variable("TemplateExpression")
 local ExpressionContent = Variable("ExpressionContent")
 local Expression = Variable("Expression")
+local UnaryOpExpression = Variable("UnaryOpExpression")
+local UnaryOperator = Variable("UnaryOperator")
 local Nil = Variable("Nil")
 local False = Variable("False")
 local True = Variable("True")
@@ -96,8 +110,16 @@ local grammar = CaptureToTable(Pattern({
   -- ExpressionContent     <- !'}}' Expression
   ExpressionContent = (Expression - Pattern("}}")) ^ 1,
 
-  -- Expression            <- Nil / False / Numeral / String
-  Expression = Nil + False + True + Numeral + String,
+  -- Expression            <- Nil / False / True / Numeral / String
+  --                        / UnaryOpExpression
+  Expression = Nil + False + True + Numeral + String + UnaryOpExpression,
+
+  -- UnaryOpExpression     <- UnaryOperator Expression Whitespace
+  UnaryOpExpression = UnaryOperator * Expression * Whitespace / make_unary_operator_node,
+
+  -- UnaryOperator         <- ('-' / 'not' / '#' / '~') Whitespace
+  -- TODO: Put in the full group of patterns
+  UnaryOperator = Capture(Pattern("-")) * Whitespace,
 
   -- Nil                   <- 'nil' Whitespace
   Nil = Capture(Pattern("nil")) * Whitespace / make_symbol_node,
