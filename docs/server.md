@@ -46,3 +46,10 @@ Having done little async work, I'm in for a lot of learning.
 What's next?
 
 * https://github.com/ms-jpq/lua-async-await/blob/neo/lua/async.lua
+
+## Parser notes
+
+* https://httpwg.org/specs/
+* HTTP message format: https://httpwg.org/specs/rfc7230.html#request.line
+* URI spec: https://datatracker.ietf.org/doc/html/rfc3986
+* HTTP semantics: https://httpwg.org/specs/rfc7231.html#representation.data
