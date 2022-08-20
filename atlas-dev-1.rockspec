@@ -3,7 +3,7 @@ package = "atlas"
 version = "dev-1"
 
 source = {
-  url = "git+https://git@github.com/mblayman/atlas.git"
+  url = "git+https://github.com/mblayman/atlas.git"
 }
 
 description = {

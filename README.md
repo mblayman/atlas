@@ -69,7 +69,7 @@ pre-commit install
 ## Release notes
 
 ```
-luarocks new_version <previous rockspec>
+luarocks new_version atlas-dev-1.rockspec <new version like 0.2>
 # Upload expects branch name of v0.1 format
 # Example
 luarocks upload rockspecs/atlas-0.1-1.rockspec --api-key=$LUAROCKS_KEY
