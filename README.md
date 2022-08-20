@@ -71,6 +71,8 @@ pre-commit install
 ```
 luarocks new_version atlas-dev-1.rockspec <new version like 0.2>
 # Upload expects branch name of v0.1 format
+git tag -a v0.2 -m 0.2
+# The upload command will build a source rock locally.
 # Example
 luarocks upload rockspecs/atlas-0.1-1.rockspec --api-key=$LUAROCKS_KEY
 ```
