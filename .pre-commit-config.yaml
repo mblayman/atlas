@@ -4,7 +4,7 @@ ci:
 
 repos:
 - repo: https://github.com/lunarmodules/luacheck
-  rev: "v1.1.0"
+  rev: "v1.1.1"
   hooks:
   - id: luacheck
 - repo: https://github.com/mblayman/LuaFormatter
