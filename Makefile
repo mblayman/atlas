@@ -2,10 +2,6 @@
 
 lr = luarocks --tree .luarocks
 
-coverage: clean t
-	luacov src
-	@tail -n+$$(cat luacov.report.out | grep -m 1 -n 'Summary' | cut -d: -f 1) luacov.report.out | grep -v '100.00'
-
 clean:
 	@rm -f luacov.*
 
