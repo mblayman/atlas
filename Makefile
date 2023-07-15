@@ -3,7 +3,7 @@
 lr = luarocks --tree .luarocks
 
 clean:
-	@rm -f luacov.*
+	@rm -rf lcov.info html
 
 build:
 	$(lr) install luatest
@@ -16,3 +16,7 @@ atlas:
 
 bootstrap:
 	$(lr) install luacheck
+
+coverage: clean
+	luatest --cov lua
+	genhtml -o html lcov.info
