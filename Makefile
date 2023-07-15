@@ -9,17 +9,8 @@ coverage: clean t
 clean:
 	@rm -f luacov.*
 
-# Busted has no expected failure feature so let's fake it for now.
-# This isn't great because it hides tests instead of skipping them
-# and showing that they were skipped.
-t:
-	busted --exclude-tags xfail
-
-tap:
-	busted --exclude-tags xfail -o tap
-
 build:
-	$(lr) install busted
+	$(lr) install luatest
 	$(lr) install LuaCov
 	which lua-format || $(lr) install --server https://luarocks.org/dev luaformatter
 	$(lr) make
