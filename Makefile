@@ -20,3 +20,4 @@ bootstrap:
 coverage: clean
 	luatest --cov lua
 	genhtml -o html lcov.info
+	open html/index.html

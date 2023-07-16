@@ -31,6 +31,6 @@ jobs:
       run: "find lua tests -name '*.lua' -print0 | xargs -0 lua-format --check"
 
     - name: test
-      run: luatest
+      run: luatest --cov lua
       env:
         ATLAS_CONFIG: tests.config
