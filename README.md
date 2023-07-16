@@ -53,8 +53,7 @@ This order sounds appealing to me.
 
 ## Tools
 
-* Busted for tests. `luarocks install busted`
-* LuaCov for coverage. `luarocks install LuaCov`
+* luatest for tests. `luarocks install luatest`
 * LuaCheck for lint. `luarocks install LuaCheck`
 * Here is the pre-commit PR for Lua support:
   https://github.com/pre-commit/pre-commit/pull/2158
