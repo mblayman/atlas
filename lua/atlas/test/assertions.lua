@@ -1,4 +1,4 @@
-local assert = require "luassert.assert"
+local assert = require "luassert"
 
 local assertions = {}
 

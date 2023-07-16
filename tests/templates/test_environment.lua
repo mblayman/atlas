@@ -3,7 +3,7 @@ local path = require "pl.path"
 
 local Environment = require "atlas.templates.environment"
 
-local test_path = path.package_path("tests.templates.file_loader_test")
+local test_path = path.package_path("tests.templates.test_file_loader")
 local templates_test_path = path.dirname(path.abspath(test_path))
 
 local tests = {}
